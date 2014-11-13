@@ -21,9 +21,9 @@ var data = seajs.data = {}
  */
 
 /*--------------------- by paper -------------------------
-	一些类型判断
-	
-	Array.isArray 原生判断，更快
+  一些类型判断
+
+  Array.isArray 原生判断，更快
 ---------------------------------------------------------*/
 function isType(type) {
   return function(obj) {
@@ -50,16 +50,16 @@ var events = data.events = {}
 
 // Bind event
 /*--------------------- by paper -------------------------
-	事件绑定
-	每一个事件名，都是一个数组，可以“绑定” 多个函数
-	
-	example: 
-	seajs.on("paper", function(){ console.log("hello paper"); });
-	=>
-	
-	events = {
-		"paper" : [ function(){ console.log("hello paper"); } ]
-	}
+  事件绑定
+  每一个事件名，都是一个数组，可以“绑定” 多个函数
+
+  example: 
+  seajs.on("paper", function(){ console.log("hello paper"); });
+  =>
+
+  events = {
+    "paper" : [ function(){ console.log("hello paper"); } ]
+  }
 ---------------------------------------------------------*/
 seajs.on = function(name, callback) {
   var list = events[name] || (events[name] = [])
@@ -71,18 +71,18 @@ seajs.on = function(name, callback) {
 // event. If `event` and `callback` are both undefined, remove all callbacks
 // for all events
 /*--------------------- by paper -------------------------
-	事件移除
-	seajs.off("paper");   //移除 paper  里面的所有函数
-	seajs.off();  				//移除 events 里面所有的名称和对应的函数（清空）
+  事件移除
+  seajs.off("paper");     //移除 paper  里面的所有函数
+  seajs.off();            //移除 events 里面所有的名称和对应的函数（清空）
 ---------------------------------------------------------*/
 seajs.off = function(name, callback) {
   // Remove *all* events
-	
-	/*--------------------- by paper -------------------------
-		或许 这样更好理解
-		
-		if (!name && !callback){} //If `event` and `callback` are both undefined
-	---------------------------------------------------------*/
+
+  /*--------------------- by paper -------------------------
+    或许 这样更好理解
+    
+    if (!name && !callback){} //If `event` and `callback` are both undefined
+  ---------------------------------------------------------*/
   if (!(name || callback)) {
     events = data.events = {}
     return seajs
@@ -91,33 +91,33 @@ seajs.off = function(name, callback) {
   var list = events[name]
   if (list) {
     if (callback) {
-			/*--------------------- by paper -------------------------
-				从 list 后面开始一一核对 callback
-				这里比较有趣~~
-				
-				大家可以先考虑一下传统写法：
-				for (var i = 0, len = list.length; i < len; i++) {
-					if (list[i] === callback) {
-						list.splice(i, 1)
-					}
-				}
-				这样写可不可以？？
-				
-				是不可以的，因为 splice 会改变list的长度。举个例子，就明白了。
-				
-				example:
-				list = ['a','b','c','d','e'];
-				callback = "c";
-				
-				(1) 从前面开始，当 i=2 时，移除 "c"，list 变为 ['a','b','d','e'];
-				i++ 后，变成 3，跳过 "d"，直接判断 "e"了。
-				
-				(2) 从后面开始，当 i=2 时，移除 "c"，list 变为 ['a','b','d','e'];
-				i-- 后，变成 1，继续判断 "b"。
-				
-				PS：通过测试，forEach 比 for 要快一点点 (但这里也不能使用forEach)
-				http://jsperf.com/paper-for-and-each
-			---------------------------------------------------------*/
+    /*--------------------- by paper -------------------------
+      从 list 后面开始一一核对 callback
+      这里比较有趣~~
+
+      大家可以先考虑一下传统写法：
+      for (var i = 0, len = list.length; i < len; i++) {
+        if (list[i] === callback) {
+          list.splice(i, 1)
+        }
+      }
+      这样写可不可以？？
+
+      是不可以的，因为 splice 会改变list的长度。举个例子，就明白了。
+
+      example:
+      list = ['a','b','c','d','e'];
+      callback = "c";
+
+      (1) 从前面开始，当 i=2 时，移除 "c"，list 变为 ['a','b','d','e'];
+      i++ 后，变成 3，跳过 "d"，直接判断 "e"了。
+
+      (2) 从后面开始，当 i=2 时，移除 "c"，list 变为 ['a','b','d','e'];
+      i-- 后，变成 1，继续判断 "b"。
+
+      PS：通过测试，forEach 比 for 要快一点点 (但这里也不能使用forEach)
+      http://jsperf.com/paper-for-and-each
+    ---------------------------------------------------------*/
       for (var i = list.length - 1; i >= 0; i--) {
         if (list[i] === callback) {
           list.splice(i, 1)
@@ -135,8 +135,8 @@ seajs.off = function(name, callback) {
 // Emit event, firing all bound callbacks. Callbacks receive the same
 // arguments as `emit` does, apart from the event name
 /*--------------------- by paper -------------------------
-	运行 events[name] 列表里面的每一个函数
-	data 作为每一个函数的参数(一般都是对象)
+  运行 events[name] 列表里面的每一个函数
+  data 作为每一个函数的参数(一般都是对象)
 ---------------------------------------------------------*/
 var emit = seajs.emit = function(name, data) {
 	// 这个 fn 干嘛的？github上3.0.0 去掉了，估计是笔误 (by paper) 
@@ -144,11 +144,11 @@ var emit = seajs.emit = function(name, data) {
 
   if (list) {
     // Copy callback lists to prevent modification
-		// 复制一份，避免list中途被人修改了，引发错乱 (by paper) 
+    // 复制一份，避免list中途被人修改了，引发错乱 (by paper) 
     list = list.slice()
 
     // Execute event callbacks, use index because it's the faster.
-		// 逐个运行 回调函数。use index because it's the faster ??? 什意思? (by paper) 
+    // 逐个运行 回调函数。use index because it's the faster ??? 什意思? (by paper) 
     for(var i = 0, len = list.length; i < len; i++) {
       list[i](data)
     }
@@ -199,7 +199,7 @@ function realpath(path) {
   path = path.replace(MULTI_SLASH_RE, "$1/")
 
   // a/b/c/../../d  ==>  a/b/../d  ==>  a/d
-	// 循环替换 /c/../ 这种结构，直到 match 找不到 (by paper)
+  // 循环替换 /c/../ 这种结构，直到 match 找不到 (by paper)
   while (path.match(DOUBLE_DOT_RE)) {
     path = path.replace(DOUBLE_DOT_RE, "/")
   }
@@ -225,17 +225,51 @@ function normalize(path) {
 }
 
 
-// 匹配 开头
+// 匹配(捕获) 开头 除了/:的字符 连接 /和任意字符 结束 
+// 比如：abc/d  (by paper)
 var PATHS_RE = /^([^/:]+)(\/.+)$/
 
-// 匹配 {} 里面的除了{的任意字符 (by paper)
+// 匹配(捕获) {} 里面的除了{的任意字符 (by paper)
 var VARS_RE = /{([^{]+)}/g
 
+/*--------------------- by paper -------------------------
+  解析别名
+  @id 如果在 data.alias[id] 里面 就返回对应的数据，否者返回 id
+  
+  下面 parse的几个函数 具体请搜索 id2Uri 是如何调用的 
+---------------------------------------------------------*/
 function parseAlias(id) {
   var alias = data.alias
   return alias && isString(alias[id]) ? alias[id] : id
 }
 
+
+/*--------------------- by paper -------------------------
+  前提：这里的 @id 是经过 parseAlias 先解析过一遍的 
+  
+  example:
+  
+  seajs.config({
+    paths: {
+      'arale': 'https://a.alipayobjects.com/arale'
+    },
+    alias: {
+      'class': 'arale/class/1.0.0/class'
+    }
+  });
+  
+  假如 id = 'class'
+  
+  id = parseAlias(id)
+  => id = 'arale/class/1.0.0/class'
+  
+  m = id.match(PATHS_RE)
+  => m = ["arale/class/1.0.0/class", "arale", "/class/1.0.0/class"]
+  
+  id = paths[m[1]] + m[2]
+  => 'https://a.alipayobjects.com/arale' + '/class/1.0.0/class'
+  => 'https://a.alipayobjects.com/arale/class/1.0.0/class'
+---------------------------------------------------------*/
 function parsePaths(id) {
   var paths = data.paths
   var m
@@ -247,6 +281,24 @@ function parsePaths(id) {
   return id
 }
 
+/*--------------------- by paper -------------------------
+  前提：这里的 @id 是经过 parsePaths 先解析过一遍的 
+
+  seajs.config({
+    vars: {
+      'locale': 'zh-cn'
+    }
+  });
+  
+  把字符串里面的大括号里面的数据替换
+  
+  比如：
+  lang = require('./i18n/{locale}.js');
+  => lang = require('./i18n/zh-cn.js');
+  
+  怎么来的呢？
+  parseVars => id2Uri => seajs.resolve => Module.resolve => seajs.require
+---------------------------------------------------------*/
 function parseVars(id) {
   var vars = data.vars
 
@@ -283,6 +335,10 @@ function parseMap(uri) {
 var ABSOLUTE_RE = /^\/\/.|:\//
 var ROOT_DIR_RE = /^.*?\/\/.*?\//
 
+/*--------------------- by paper -------------------------
+
+  
+---------------------------------------------------------*/
 function addBase(id, refUri) {
   var ret
   var first = id.charAt(0)
@@ -413,6 +469,9 @@ function addOnload(node, callback, url) {
     node.onload = node.onerror = node.onreadystatechange = null
 
     // Remove the script to reduce memory leak
+    
+    // 如果 debug 设置为 true ，就不会删除 动态插入的script标签 (by paper)
+    // https://github.com/seajs/seajs/issues/262
     if (!data.debug) {
       head.removeChild(node)
     }
