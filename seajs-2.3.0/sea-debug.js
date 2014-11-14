@@ -15,16 +15,11 @@ var seajs = global.seajs = {
 
 var data = seajs.data = {}
 
-
+// ---
 /**
  * util-lang.js - The minimal language enhancement
  */
 
-/*--------------------- by paper -------------------------
-  一些类型判断
-
-  Array.isArray 原生判断，更快
----------------------------------------------------------*/
 function isType(type) {
   return function(obj) {
     return {}.toString.call(obj) == "[object " + type + "]"
@@ -33,6 +28,7 @@ function isType(type) {
 
 var isObject = isType("Object")
 var isString = isType("String")
+// ```Array.isArray``` 原生判断，更快
 var isArray = Array.isArray || isType("Array")
 var isFunction = isType("Function")
 
@@ -41,22 +37,23 @@ function cid() {
   return _cid++
 }
 
-
+// ---
 /**
  * util-events.js - The minimal events support
  */
 
 var events = data.events = {}
 
+
 // Bind event
-/*--------------------- by paper -------------------------
+/*-------------------------------------------------------
   事件绑定
   每一个事件名，都是一个数组，可以“绑定” 多个函数
-
-  example: 
+  
+  example:
+  
   seajs.on("paper", function(){ console.log("hello paper"); });
   =>
-
   events = {
     "paper" : [ function(){ console.log("hello paper"); } ]
   }
@@ -67,18 +64,18 @@ seajs.on = function(name, callback) {
   return seajs
 }
 
+// ---
 // Remove event. If `callback` is undefined, remove all callbacks for the
 // event. If `event` and `callback` are both undefined, remove all callbacks
 // for all events
-/*--------------------- by paper -------------------------
+/*---------------------------------------------------------
   事件移除
   seajs.off("paper");     //移除 paper  里面的所有函数
   seajs.off();            //移除 events 里面所有的名称和对应的函数（清空）
 ---------------------------------------------------------*/
 seajs.off = function(name, callback) {
   // Remove *all* events
-
-  /*--------------------- by paper -------------------------
+  /*---------------------------------------------------------
     或许 这样更好理解
     
     if (!name && !callback){} //If `event` and `callback` are both undefined
@@ -91,7 +88,7 @@ seajs.off = function(name, callback) {
   var list = events[name]
   if (list) {
     if (callback) {
-    /*--------------------- by paper -------------------------
+    /*-------------------------------------------------------
       从 list 后面开始一一核对 callback
       这里比较有趣~~
 
@@ -106,6 +103,7 @@ seajs.off = function(name, callback) {
       是不可以的，因为 splice 会改变list的长度。举个例子，就明白了。
 
       example:
+      
       list = ['a','b','c','d','e'];
       callback = "c";
 
@@ -132,23 +130,24 @@ seajs.off = function(name, callback) {
   return seajs
 }
 
+// ---
 // Emit event, firing all bound callbacks. Callbacks receive the same
 // arguments as `emit` does, apart from the event name
-/*--------------------- by paper -------------------------
+/*-------------------------------------------------------
+  事件运行
   运行 events[name] 列表里面的每一个函数
   data 作为每一个函数的参数(一般都是对象)
 ---------------------------------------------------------*/
 var emit = seajs.emit = function(name, data) {
-	// 这个 fn 干嘛的？github上3.0.0 去掉了，估计是笔误 (by paper) 
+	// 这个 ```fn``` 干嘛的？github上3.0.0 去掉了，估计是笔误
   var list = events[name], fn
 
   if (list) {
     // Copy callback lists to prevent modification
-    // 复制一份，避免list中途被人修改了，引发错乱 (by paper) 
     list = list.slice()
 
     // Execute event callbacks, use index because it's the faster.
-    // 逐个运行 回调函数。use index because it's the faster ??? 什意思? (by paper) 
+    /* use index because it's the faster ??? */
     for(var i = 0, len = list.length; i < len; i++) {
       list[i](data)
     }
@@ -157,26 +156,34 @@ var emit = seajs.emit = function(name, data) {
   return seajs
 }
 
-
+// ---
 /**
  * util-path.js - The utilities for operating path such as id, uri
  */
 
-// 表示：除了问号和hash的任何字符 连接 /  
-// 比如：abc/ 或者 / (by paper) 
+
+// 除了问号和hash的任何字符 连接 ```/```    
+// 比如：```abc/``` 或者 ```/```
 var DIRNAME_RE = /[^?#]*\//
 
-// 表示：/./         realpath函数会用 / 替换它 (by paper) 
+// ---
+// ```/./```   
+// ```realpath```函数会用 ```/``` 替换它
 var DOT_RE = /\/\.\//g
 
-// 表示：/ 连接 除了/的任何字符 连接 /../ 
-// 比如：/abc/../    其实就是 / 。因为进入abc又出来了，看后面realpath函数就知道了要替换掉(by paper) 
+// ---
+// ```/``` 连接 除了```/```的任何字符 连接 ```/../```   
+// 比如：```/abc/../```    
+// 其实就是 ```/``` 。因为进入abc又出来了，看后面```realpath```函数就知道了要替换掉
 var DOUBLE_DOT_RE = /\/[^/]+\/\.\.\//
 
-// 表示：除了:和/ 的任何字符(捕获) 连接 1个或多个/ 连接 /
-// 比如：a///       realpath函数会把它变成 a/  (by paper)
+// ---
+// 除了```:```和```/``` 的任何字符(捕获) 连接 1个或多个```/``` 连接 ```/```
+// 比如：```a///```       
+// ```realpath``` 函数会把它变成 ```a/```
 var MULTI_SLASH_RE = /([^:/])\/+\//g
 
+// ---
 // Extract the directory portion of a path
 // dirname("a/b/c.js?t=123#xx/zz") ==> "a/b/"
 // ref: http://jsperf.com/regex-vs-split/2
@@ -184,10 +191,11 @@ function dirname(path) {
   return path.match(DIRNAME_RE)[0]
 }
 
+// ---
 // Canonicalize a path
 // realpath("http://test.com/a//./b/../c") ==> "http://test.com/a/c"
 function realpath(path) {
-  // /a/b/./c/./d ==> /a/b/c/d
+  // ```/a/b/./c/./d``` ==> ```/a/b/c/d```
   path = path.replace(DOT_RE, "/")
 
   /*
@@ -198,8 +206,8 @@ function realpath(path) {
   */
   path = path.replace(MULTI_SLASH_RE, "$1/")
 
-  // a/b/c/../../d  ==>  a/b/../d  ==>  a/d
-  // 循环替换 /c/../ 这种结构，直到 match 找不到 (by paper)
+  // ```a/b/c/../../d```  =>  ```a/b/../d```  =>  ```a/d```  
+  // 循环替换 ```/c/../``` 这种结构，直到 ```match``` 找不到
   while (path.match(DOUBLE_DOT_RE)) {
     path = path.replace(DOUBLE_DOT_RE, "/")
   }
@@ -207,6 +215,7 @@ function realpath(path) {
   return path
 }
 
+// ---
 // Normalize an id
 // normalize("path/to/a") ==> "path/to/a.js"
 // NOTICE: substring is faster than negative slice and RegExp
@@ -224,52 +233,46 @@ function normalize(path) {
       lastC === "/") ? path : path + ".js"
 }
 
-
-// 匹配(捕获) 开头 除了/:的字符 连接 /和任意字符 结束 
-// 比如：abc/d  (by paper)
+// ---
+// 匹配(捕获) 开头 除了```/``` ```:``` 的字符 连接 ```/``` 和任意字符 结束  
+// 比如：```abc/d```
 var PATHS_RE = /^([^/:]+)(\/.+)$/
 
-// 匹配(捕获) {} 里面的除了{的任意字符 (by paper)
+// ---
+// 匹配(捕获) ```{}``` 里面的除了 ```{``` 的任意字符
 var VARS_RE = /{([^{]+)}/g
 
-/*--------------------- by paper -------------------------
-  解析别名
-  @id 如果在 data.alias[id] 里面 就返回对应的数据，否者返回 id
-  
-  下面 parse的几个函数 具体请搜索 id2Uri 是如何调用的 
----------------------------------------------------------*/
+// ---
+// 解析别名  
+// @id 如果在 ```data.alias[id]``` 里面 就返回对应的数据，否者返回 ```id```  
+// 下面 parse的几个函数 具体请搜索 ```id2Uri``` 是如何调用的  
 function parseAlias(id) {
   var alias = data.alias
   return alias && isString(alias[id]) ? alias[id] : id
 }
 
 
-/*--------------------- by paper -------------------------
-  前提：这里的 @id 是经过 parseAlias 先解析过一遍的 
-  
-  example:
-  
-  seajs.config({
-    paths: {
-      'arale': 'https://a.alipayobjects.com/arale'
-    },
-    alias: {
-      'class': 'arale/class/1.0.0/class'
-    }
-  });
-  
-  假如 id = 'class'
-  
-  id = parseAlias(id)
-  => id = 'arale/class/1.0.0/class'
-  
-  m = id.match(PATHS_RE)
-  => m = ["arale/class/1.0.0/class", "arale", "/class/1.0.0/class"]
-  
-  id = paths[m[1]] + m[2]
-  => 'https://a.alipayobjects.com/arale' + '/class/1.0.0/class'
-  => 'https://a.alipayobjects.com/arale/class/1.0.0/class'
----------------------------------------------------------*/
+// ---
+// 前提：这里的 @id 是经过 ```parseAlias``` 先解析过一遍的  
+// example: 
+// ```
+// seajs.config({   
+//    paths: {  
+//      'arale': 'https://a.alipayobjects.com/arale'  
+//    },  
+//    alias: {  
+//      'class': 'arale/class/1.0.0/class'  
+//    }  
+// });  
+// id = 'class'  
+// id = parseAlias(id)  
+// => id = 'arale/class/1.0.0/class'  
+// m = id.match(PATHS_RE)  
+// => m = ["arale/class/1.0.0/class", "arale", "/class/1.0.0/class"]  
+// id = paths[m[1]] + m[2]  
+// => 'https://a.alipayobjects.com/arale' + '/class/1.0.0/class'  
+// => 'https://a.alipayobjects.com/arale/class/1.0.0/class'
+// ```
 function parsePaths(id) {
   var paths = data.paths
   var m
@@ -281,7 +284,7 @@ function parsePaths(id) {
   return id
 }
 
-/*--------------------- by paper -------------------------
+/*-------------------------------------------------------
   前提：这里的 @id 是经过 parsePaths 先解析过一遍的 
 
   seajs.config({
@@ -311,6 +314,89 @@ function parseVars(id) {
   return id
 }
 
+/*
+  正则解析： 开头为 // 连接 任意字符 或者 :/
+  
+  也就是说 在 uri 里面找到了 //开头的，或者 :/ ，就可以判断是绝对路径了。
+  比如：//abc.com/ 或者 http://abc.com/ 
+*/
+var ABSOLUTE_RE = /^\/\/.|:\//
+
+/*
+  正则解析： 开头是任何一个字符(0个或多个，而且可有可无) 连接 // 连接 任何一个字符(0个或多个，而且可有可无) 连接 /
+  
+  取出 uri 的根目录，比如 ：
+  "https://github.com/seajs/seajs/issues/262".match(ROOT_DIR_RE)
+  =>
+  ["https://github.com/"]
+*/
+var ROOT_DIR_RE = /^.*?\/\/.*?\//
+
+/*-------------------------------------------------------
+  前提：这里的 @id 是经过 normalize 先解析过一遍的
+  
+  官方说（https://github.com/seajs/seajs/issues/262）：
+      base {String}
+      Sea.js 在解析顶级标识时，会相对 base 路径来解析。详情请参阅 模块标识
+      注意：一般请不要配置 base 路径，把 sea.js 放在合适的路径往往更简单一致。
+---------------------------------------------------------*/
+function addBase(id, refUri) {
+  var ret
+  var first = id.charAt(0)
+
+  // Absolute
+  // 绝对路径
+  // 那么就不存在添加什么 base 路径了
+  if (ABSOLUTE_RE.test(id)) {
+    ret = id
+  }
+  // Relative
+  // 相对路径
+  // 如果引入了 refUri，使用 refUri 的 dirname(refUri) 添加到 id 的前面，并使用 realpath 过滤一下
+  // 如果没有引入 refUri ，就使用 cwd 添加到 id 的前面，并使用 realpath 过滤一下
+  else if (first === ".") {
+    ret = realpath((refUri ? dirname(refUri) : data.cwd) + id)
+  }
+  
+  // Root
+  // 根目录
+  // 首先得到 cwd 的根目录
+  // 如果有，就 和 id 连接，
+  // 如果没有(因为cwd有可能为空字符串)，就直接返回id
+  else if (first === "/") {
+    var m = data.cwd.match(ROOT_DIR_RE)
+    ret = m ? m[0] + id.substring(1) : id
+  }
+  // Top-level
+  // 除了前面的各种情况，才会用到你定义的 base，看来 base 要用上还挺不容易的
+  else {
+    ret = data.base + id
+  }
+
+  // Add default protocol when uri begins with "//"
+  if (ret.indexOf("//") === 0) {
+    ret = location.protocol + ret
+  }
+
+  return ret
+}
+
+/*-------------------------------------------------------
+  说明：@uri 之前先运行的是 addBase 返回的
+  该配置可对模块路径进行映射修改，可用于路径转换、在线调试等
+  (https://github.com/seajs/seajs/issues/262)
+  
+  看了源码之后，发现rule原来还可以写函数。
+  
+  比如：
+  seajs.config({
+    map: [
+      function(uri){
+        return '/test/' + uri;
+      }
+    ]
+  });
+---------------------------------------------------------*/
 function parseMap(uri) {
   var map = data.map
   var ret = uri
@@ -324,46 +410,9 @@ function parseMap(uri) {
           uri.replace(rule[0], rule[1])
 
       // Only apply the first matched rule
+      // 只要发现 uri 变化了，立即退出
       if (ret !== uri) break
     }
-  }
-
-  return ret
-}
-
-
-var ABSOLUTE_RE = /^\/\/.|:\//
-var ROOT_DIR_RE = /^.*?\/\/.*?\//
-
-/*--------------------- by paper -------------------------
-
-  
----------------------------------------------------------*/
-function addBase(id, refUri) {
-  var ret
-  var first = id.charAt(0)
-
-  // Absolute
-  if (ABSOLUTE_RE.test(id)) {
-    ret = id
-  }
-  // Relative
-  else if (first === ".") {
-    ret = realpath((refUri ? dirname(refUri) : data.cwd) + id)
-  }
-  // Root
-  else if (first === "/") {
-    var m = data.cwd.match(ROOT_DIR_RE)
-    ret = m ? m[0] + id.substring(1) : id
-  }
-  // Top-level
-  else {
-    ret = data.base + id
-  }
-
-  // Add default protocol when uri begins with "//"
-  if (ret.indexOf("//") === 0) {
-    ret = location.protocol + ret
   }
 
   return ret
@@ -385,10 +434,30 @@ function id2Uri(id, refUri) {
 
 
 var doc = document
+
+/* 
+  当前的工作目录
+  
+  说明一下 cwd 为 "" 的情况：
+  
+  !location.href 为 true
+  说明 location.href 取不到，不是浏览器环境。直接跳出，不会判断后面的，cwd = ""
+  
+  !location.href 为 false，判断后面的
+  location.href.indexOf('about:') === 0 为 true
+  说明 location.href 极有可能进入了 空页面（about:blank），cwd = ""
+  
+  PS：吐槽一下，进入了about:开头的页面，还有可能引入得了 seajs？？
+*/
 var cwd = (!location.href || location.href.indexOf('about:') === 0) ? '' : dirname(location.href)
+
+// 运行到 seajs 时，获取当前的 “全部” 脚本，也就是说，最后一个肯定是 seajs
+// 这个技巧 在 loaderScript 获取上有体现
+// 所以 玉伯 推荐 给引入 seajs 的 script 加上 "seajsnode" id
 var scripts = doc.scripts
 
 // Recommend to add `seajsnode` id for the `sea.js` script element
+// ref : https://github.com/seajs/seajs/issues/260
 var loaderScript = doc.getElementById("seajsnode") ||
     scripts[scripts.length - 1]
 
@@ -404,6 +473,7 @@ function getScriptAbsoluteSrc(node) {
 
 
 // For Developers
+// 暴露出去 :D
 seajs.resolve = id2Uri
 
 
@@ -519,7 +589,7 @@ seajs.request = request
  */
 
  
-/*--------------------- by paper -------------------------
+/*-------------------------------------------------------
   "(?:\\"|[^"])*"
   (非捕获) 获取 双引号 里面的内容
 
@@ -556,7 +626,7 @@ function parseDependencies(code) {
   code.replace(SLASH_RE, "")
       .replace(REQUIRE_RE, function(m, m1, m2) {
         
-        /*--------------------- by paper -------------------------
+        /*-------------------------------------------------------
           console.log(m);
           console.log(m1);
           console.log(m2);
