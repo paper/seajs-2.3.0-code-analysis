@@ -499,7 +499,9 @@ function request(url, callback, charset) {
   }
 
   addOnload(node, callback, url)
-
+  
+  // async，HTML5中的script属性
+  // 脚本会相对于文档的其余部分异步执行，这样脚本会可以在页面继续解析的过程中来执行
   node.async = true
   node.src = url
 
@@ -509,6 +511,7 @@ function request(url, callback, charset) {
   currentlyAddingScript = node
 
   // ref: #185 & http://dev.jquery.com/ticket/2709
+  // IE6的一个bug :(
   baseElement ?
       head.insertBefore(node, baseElement) :
       head.appendChild(node)
@@ -516,6 +519,7 @@ function request(url, callback, charset) {
   currentlyAddingScript = null
 }
 
+// 动态加载脚本，加载完毕后，触发 @callback
 function addOnload(node, callback, url) {
   var supportOnload = "onload" in node
 
@@ -536,11 +540,11 @@ function addOnload(node, callback, url) {
 
   function onload() {
     // Ensure only run once and handle memory leak in IE
+    // 确保只允许一次，处理IE的内存泄漏
     node.onload = node.onerror = node.onreadystatechange = null
 
     // Remove the script to reduce memory leak
-    
-    // 如果 debug 设置为 true ，就不会删除 动态插入的script标签 (by paper)
+    // 如果 debug 设置为 true ，就不会删除 动态插入的script标签
     // https://github.com/seajs/seajs/issues/262
     if (!data.debug) {
       head.removeChild(node)
@@ -553,6 +557,7 @@ function addOnload(node, callback, url) {
   }
 }
 
+// 获取当前，正在请求的脚本
 function getCurrentScript() {
   if (currentlyAddingScript) {
     return currentlyAddingScript
@@ -614,11 +619,12 @@ seajs.request = request
 var REQUIRE_RE = /"(?:\\"|[^"])*"|'(?:\\'|[^'])*'|\/\*[\S\s]*?\*\/|\/(?:\\\/|[^\/\r\n])+\/(?=[^\/])|\/\/.*|\.\s*require|(?:^|[^$])\brequire\s*\(\s*(["'])(.+?)\1\s*\)/g
 
 
-
+// 双斜杠
 var SLASH_RE = /\\\\/g
 
 
-// 通过解析code 源码，找出 require 的 内容，然后存到 deps 里面
+// 解析依赖
+// 通过解析 code 源码，找出 require 的内容，然后存到 deps 里面
 // module.dependencies
 function parseDependencies(code) {
   var ret = []
@@ -653,18 +659,30 @@ var fetchingList = {}
 var fetchedList = {}
 var callbackList = {}
 
+// 模块状态码
 var STATUS = Module.STATUS = {
   // 1 - The `module.uri` is being fetched
+  // 正在获取中。。。
   FETCHING: 1,
+  
   // 2 - The meta data has been saved to cachedMods
+  // 元数据已经保存到 缓存模块里面了
   SAVED: 2,
+  
   // 3 - The `module.dependencies` are being loaded
+  // 模块依赖 正在加载中。。。
   LOADING: 3,
+  
   // 4 - The module are ready to execute
+  // 模块解析完毕
   LOADED: 4,
+  
   // 5 - The module is being executed
+  // 模块正在执行中
   EXECUTING: 5,
+  
   // 6 - The `module.exports` is available
+  // module.exports 是可用的
   EXECUTED: 6
 }
 
@@ -676,13 +694,16 @@ function Module(uri, deps) {
   this.status = 0
 
   // Who depends on me
+  // 正在等待被加载的依赖的个数
   this._waitings = {}
 
   // The number of unloaded dependencies
+  // 没有加载依赖的个数
   this._remain = 0
 }
 
 // Resolve module.dependencies
+// 把依赖的简称( 代码里面require里面的字符串 ) 变成 真实的js路径
 Module.prototype.resolve = function() {
   var mod = this
   var ids = mod.dependencies
@@ -718,13 +739,15 @@ Module.prototype.load = function() {
 
     if (m.status < STATUS.LOADED) {
       // Maybe duplicate: When module has dupliate dependency, it should be it's count, not 1
+      // 如果 mod.uri 等待数已经存在，那么再加1 
       m._waitings[mod.uri] = (m._waitings[mod.uri] || 0) + 1
     }
     else {
       mod._remain--
     }
   }
-
+  
+  // 如果全部加载解析完全了，就调用onload事件
   if (mod._remain === 0) {
     mod.onload()
     return
@@ -776,6 +799,7 @@ Module.prototype.onload = function() {
   }
 
   // Reduce memory taken
+  // 减少内存
   delete mod._waitings
   delete mod._remain
 }
@@ -898,7 +922,7 @@ Module.resolve = function(id, refUri) {
   // Emit `resolve` event for plugins such as text plugin
   var emitData = { id: id, refUri: refUri }
   emit("resolve", emitData)
-
+  
   return emitData.uri || seajs.resolve(emitData.id, refUri)
 }
 
@@ -937,7 +961,7 @@ Module.define = function (id, deps, factory) {
     factory: factory
   }
 
-  // Try to derive uri in IE6-9 for anonymous modules
+  // Try to derive uri in IE6-9 for anonymous modul es
   if (!meta.uri && doc.attachEvent) {
     var script = getCurrentScript()
 
