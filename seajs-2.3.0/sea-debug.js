@@ -49,6 +49,7 @@ var events = data.events = {}
 /*-------------------------------------------------------
   事件绑定
   每一个事件名，都是一个数组，可以“绑定” 多个函数
+  有点“中间件”的概念
   
   example:
   
@@ -716,6 +717,11 @@ Module.prototype.resolve = function() {
 }
 
 // Load module.dependencies and fire onload when all done
+// 模块加载阶段，只有当模块里面的依赖全部加载完毕了，才能触发onload事件
+/*
+  当一个模块A里面含有 require("b"); require("c");
+  肯定是要等加载完 b 和 c 这两个模块，才能做A的事情
+*/
 Module.prototype.load = function() {
   var mod = this
 
@@ -727,6 +733,8 @@ Module.prototype.load = function() {
   mod.status = STATUS.LOADING
 
   // Emit `load` event for plugins such as combo plugin
+  // 为开发插件做准备。插件可以自定义 seajs.on("load", callback);
+  // 比如 combo 插件，把uri拼在一起，节省http请求
   var uris = mod.resolve()
   emit("load", uris)
 
@@ -735,11 +743,14 @@ Module.prototype.load = function() {
 
   // Initialize modules and register waitings
   for (var i = 0; i < len; i++) {
+    // 得到需要依赖的 uris[i] 对应的模块，如果cachedMods缓存里面有，就拿缓存的
+    // 如果没有，就调用 new Module(uri, deps) 来获取
     m = Module.get(uris[i])
-
+    
+    // 如果 m 模块，没有加载完毕
     if (m.status < STATUS.LOADED) {
       // Maybe duplicate: When module has dupliate dependency, it should be it's count, not 1
-      // 如果 mod.uri 等待数已经存在，那么再加1 
+      // 如果 mod.uri 等待数已经存在，那么再加1 算出 ，
       m._waitings[mod.uri] = (m._waitings[mod.uri] || 0) + 1
     }
     else {
@@ -747,7 +758,7 @@ Module.prototype.load = function() {
     }
   }
   
-  // 如果全部加载解析完全了，就调用onload事件
+  // 如果依赖全部加载解析完毕，就调用onload事件
   if (mod._remain === 0) {
     mod.onload()
     return
@@ -779,7 +790,8 @@ Module.prototype.load = function() {
 Module.prototype.onload = function() {
   var mod = this
   mod.status = STATUS.LOADED
-
+  
+  // 为 Module.use 准备的
   if (mod.callback) {
     mod.callback()
   }
