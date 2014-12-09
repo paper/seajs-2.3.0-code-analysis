@@ -89,6 +89,7 @@
  * util-lang.js - The minimal language enhancement
  */</span>
 
+ 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isType</span><span class="hljs-params">(type)</span> </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(obj)</span> </span>{
     <span class="hljs-keyword">return</span> {}.toString.call(obj) == <span class="hljs-string">"[object "</span> + type + <span class="hljs-string">"]"</span>
@@ -112,12 +113,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> isArray = <span class="hljs-built_in">Array</span>.isArray || isType(<span class="hljs-string">"Array"</span>)
-<span class="hljs-keyword">var</span> isFunction = isType(<span class="hljs-string">"Function"</span>)
-
-<span class="hljs-keyword">var</span> _cid = <span class="hljs-number">0</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cid</span><span class="hljs-params">()</span> </span>{
-  <span class="hljs-keyword">return</span> _cid++
-}</pre></div></div>
+<span class="hljs-keyword">var</span> isFunction = isType(<span class="hljs-string">"Function"</span>)</pre></div></div>
             
         </li>
         
@@ -127,6 +123,24 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>自增id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> _cid = <span class="hljs-number">0</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cid</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">return</span> _cid++
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <hr>
 
@@ -141,56 +155,26 @@
         </li>
         
         
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <p>Bind event</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/*-------------------------------------------------------
-  事件绑定
-  每一个事件名，都是一个数组，可以“绑定” 多个函数
-  
-  example:
-  
-  seajs.on("paper", function(){ console.log("hello paper"); });
-  =&gt;
-  events = {
-    "paper" : [ function(){ console.log("hello paper"); } ]
-  }
----------------------------------------------------------*/</span>
-seajs.on = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, callback)</span> </span>{
-  <span class="hljs-keyword">var</span> list = events[name] || (events[name] = [])
-  list.push(callback)
-  <span class="hljs-keyword">return</span> seajs
-}</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <hr>
-<p>Remove event. If <code>callback</code> is undefined, remove all callbacks for the
-event. If <code>event</code> and <code>callback</code> are both undefined, remove all callbacks
-for all events</p>
-
+              <p>Bind event<br>每一个事件名，都是一个数组，可以“绑定” 多个函数<br>有点“中间件”的概念<br>example:</p>
+<pre><code>seajs.on(<span class="hljs-string">"paper"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{ <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"hello paper"</span>); });
+=&gt;
+events = {
+ <span class="hljs-string">"paper"</span> : [ <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{ <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"hello paper"</span>); } ]
+}
+</code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/*---------------------------------------------------------
-  事件移除
-  seajs.off("paper");     //移除 paper  里面的所有函数
-  seajs.off();            //移除 events 里面所有的名称和对应的函数（清空）
----------------------------------------------------------*/</span>
-seajs.off = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, callback)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>seajs.on = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, callback)</span> </span>{
+  <span class="hljs-keyword">var</span> list = events[name] || (events[name] = [])
+  list.push(callback)
+  <span class="hljs-keyword">return</span> seajs
+}</pre></div></div>
             
         </li>
         
@@ -201,52 +185,70 @@ seajs.off = <span class="hljs-function"><span class="hljs-keyword">function</spa
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Remove <em>all</em> events</p>
-
+              <hr>
+<p>Remove event. If <code>callback</code> is undefined, remove all callbacks for the
+event. If <code>event</code> and <code>callback</code> are both undefined, remove all callbacks
+for all events</p>
+<pre><code>seajs.off(<span class="hljs-string">"paper"</span>); <span class="hljs-comment">//移除 paper  里面的所有函数</span>
+seajs.off();        <span class="hljs-comment">//移除 events 里面所有的名称和对应的函数（清空）</span>
+</code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-comment">/*---------------------------------------------------------
-    或许 这样更好理解
-    
-    if (!name &amp;&amp; !callback){} //If `event` and `callback` are both undefined
-  ---------------------------------------------------------*/</span>
-  <span class="hljs-keyword">if</span> (!(name || callback)) {
+            <div class="content"><div class='highlight'><pre>seajs.off = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, callback)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Remove <em>all</em> events<br>或许 这样更好理解  </p>
+<pre><code><span class="hljs-keyword">if</span> (!name &amp;&amp; !callback){} <span class="hljs-comment">//If `event` and `callback` are both undefined</span>
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (!(name || callback)) {
     events = data.events = {}
     <span class="hljs-keyword">return</span> seajs
   }
 
   <span class="hljs-keyword">var</span> list = events[name]
   <span class="hljs-keyword">if</span> (list) {
-    <span class="hljs-keyword">if</span> (callback) {
-    <span class="hljs-comment">/*-------------------------------------------------------
-      从 list 后面开始一一核对 callback
-      这里比较有趣~~
+    <span class="hljs-keyword">if</span> (callback) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>从 list 后面开始一一核对 callback
+这里比较有趣~~</p>
+<p>大家可以先考虑一下传统写法：</p>
+<pre><code><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, len = list.length; i &lt; len; i++) {
+ <span class="hljs-keyword">if</span> (list[i] === callback) {
+   list.splice(i, <span class="hljs-number">1</span>)
+ }
+}
+</code></pre><p>这样写可不可以？？</p>
+<p>是不可以的，因为 splice 会改变list的长度。举个例子，就明白了。</p>
+<p>example:</p>
+<pre><code>list = [<span class="hljs-string">'a'</span>,<span class="hljs-string">'b'</span>,<span class="hljs-string">'c'</span>,<span class="hljs-string">'d'</span>,<span class="hljs-string">'e'</span>];
+callback = <span class="hljs-string">"c"</span>;
+</code></pre><ol>
+<li>从前面开始，当 i=2 时，移除 “c”，list 变为 [‘a’,’b’,’d’,’e’];<br>i++ 后，变成 3，跳过 “d”，直接判断 “e”了。</li>
+<li>从后面开始，当 i=2 时，移除 “c”，list 变为 [‘a’,’b’,’d’,’e’];<br>i— 后，变成 1，继续判断 “b”。</li>
+</ol>
 
-      大家可以先考虑一下传统写法：
-      for (var i = 0, len = list.length; i &lt; len; i++) {
-        if (list[i] === callback) {
-          list.splice(i, 1)
-        }
-      }
-      这样写可不可以？？
-
-      是不可以的，因为 splice 会改变list的长度。举个例子，就明白了。
-
-      example:
-      
-      list = ['a','b','c','d','e'];
-      callback = "c";
-
-      (1) 从前面开始，当 i=2 时，移除 "c"，list 变为 ['a','b','d','e'];
-      i++ 后，变成 3，跳过 "d"，直接判断 "e"了。
-
-      (2) 从后面开始，当 i=2 时，移除 "c"，list 变为 ['a','b','d','e'];
-      i-- 后，变成 1，继续判断 "b"。
-
-      PS：通过测试，forEach 比 for 要快一点点 (但这里也不能使用forEach)
-      http://jsperf.com/paper-for-and-each
-    ---------------------------------------------------------*/</span>
-      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = list.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = list.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
         <span class="hljs-keyword">if</span> (list[i] === callback) {
           list.splice(i, <span class="hljs-number">1</span>)
         }
@@ -263,33 +265,27 @@ seajs.off = <span class="hljs-function"><span class="hljs-keyword">function</spa
         </li>
         
         
-        <li id="section-10">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <hr>
-<p>Emit event, firing all bound callbacks. Callbacks receive the same
-arguments as <code>emit</code> does, apart from the event name</p>
+<p>Emit event, firing all bound callbacks. Callbacks receive the same<br>arguments as <code>emit</code> does, apart from the event name<br>运行 events[name] 列表里面的每一个函数<br>data 作为每一个函数的参数(一般都是对象)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/*-------------------------------------------------------
-  事件运行
-  运行 events[name] 列表里面的每一个函数
-  data 作为每一个函数的参数(一般都是对象)
----------------------------------------------------------*/</span>
-<span class="hljs-keyword">var</span> emit = seajs.emit = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, data)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> emit = seajs.emit = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, data)</span> </span>{</pre></div></div>
             
         </li>
         
         
-        <li id="section-11">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>这个 <code>fn</code> 干嘛的？github上3.0.0 去掉了，估计是笔误</p>
 
@@ -302,11 +298,11 @@ arguments as <code>emit</code> does, apart from the event name</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>Copy callback lists to prevent modification</p>
 
@@ -317,11 +313,11 @@ arguments as <code>emit</code> does, apart from the event name</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Execute event callbacks, use index because it’s the faster.</p>
 
@@ -339,11 +335,11 @@ arguments as <code>emit</code> does, apart from the event name</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <hr>
 
@@ -356,11 +352,11 @@ arguments as <code>emit</code> does, apart from the event name</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>除了问号和hash的任何字符 连接 <code>/</code><br>比如：<code>abc/</code> 或者 <code>/</code></p>
 
@@ -371,51 +367,17 @@ arguments as <code>emit</code> does, apart from the event name</p>
         </li>
         
         
-        <li id="section-16">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-              <hr>
-<p><code>/./</code><br><code>realpath</code>函数会用 <code>/</code> 替换它</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> DOT_RE = <span class="hljs-regexp">/\/\.\//g</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-17">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
-              <hr>
-<p><code>/</code> 连接 除了<code>/</code>的任何字符 连接 <code>/../</code><br>比如：<code>/abc/../</code><br>其实就是 <code>/</code> 。因为进入abc又出来了，看后面<code>realpath</code>函数就知道了要替换掉</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> DOUBLE_DOT_RE = <span class="hljs-regexp">/\/[^/]+\/\.\.\//</span></pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <hr>
-<p>除了<code>:</code>和<code>/</code> 的任何字符(捕获) 连接 1个或多个<code>/</code> 连接 <code>/</code>
-比如：<code>a///</code><br><code>realpath</code> 函数会把它变成 <code>a/</code></p>
+              <p><code>/./</code><br><code>realpath</code>函数会用 <code>/</code> 替换它</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> MULTI_SLASH_RE = <span class="hljs-regexp">/([^:/])\/+\//g</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> DOT_RE = <span class="hljs-regexp">/\/\.\//g</span></pre></div></div>
             
         </li>
         
@@ -425,6 +387,37 @@ arguments as <code>emit</code> does, apart from the event name</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p><code>/</code> 连接 除了<code>/</code>的任何字符 连接 <code>/../</code><br>比如：<code>/abc/../</code><br>其实就是 <code>/</code> 。因为进入abc又出来了，看后面<code>realpath</code>函数就知道了要替换掉</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> DOUBLE_DOT_RE = <span class="hljs-regexp">/\/[^/]+\/\.\.\//</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>除了<code>:</code>和<code>/</code> 的任何字符(捕获) 连接 1个或多个<code>/</code> 连接 <code>/</code>
+比如：<code>a///</code><br><code>realpath</code> 函数会把它变成 <code>a/</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> MULTI_SLASH_RE = <span class="hljs-regexp">/([^:/])\/+\//g</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <hr>
 <p>Extract the directory portion of a path
@@ -440,11 +433,11 @@ ref: <a href="http://jsperf.com/regex-vs-split/2">http://jsperf.com/regex-vs-spl
         </li>
         
         
-        <li id="section-20">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <hr>
 <p>Canonicalize a path
@@ -457,11 +450,11 @@ realpath(“<a href="http://test.com/a//./b/../c">http://test.com/a//./b/../c</a
         </li>
         
         
-        <li id="section-21">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p><code>/a/b/./c/./d</code> ==&gt; <code>/a/b/c/d</code></p>
 
@@ -480,11 +473,11 @@ realpath(“<a href="http://test.com/a//./b/../c">http://test.com/a//./b/../c</a
         </li>
         
         
-        <li id="section-22">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p><code>a/b/c/../../d</code>  =&gt;  <code>a/b/../d</code>  =&gt;  <code>a/d</code><br>循环替换 <code>/c/../</code> 这种结构，直到 <code>match</code> 找不到</p>
 
@@ -500,11 +493,11 @@ realpath(“<a href="http://test.com/a//./b/../c">http://test.com/a//./b/../c</a
         </li>
         
         
-        <li id="section-23">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <hr>
 <p>Normalize an id
@@ -520,11 +513,11 @@ NOTICE: substring is faster than negative slice and RegExp</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>If the uri ends with <code>#</code>, just return it without ‘#’</p>
 
@@ -542,14 +535,13 @@ NOTICE: substring is faster than negative slice and RegExp</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <hr>
-<p>匹配(捕获) 开头 除了<code>/</code> <code>:</code> 的字符 连接 <code>/</code> 和任意字符 结束<br>比如：<code>abc/d</code></p>
+              <p>匹配(捕获) 开头 除了<code>/</code> <code>:</code> 的字符 连接 <code>/</code> 和任意字符 结束<br>比如：<code>abc/d</code></p>
 
             </div>
             
@@ -558,14 +550,13 @@ NOTICE: substring is faster than negative slice and RegExp</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <hr>
-<p>匹配(捕获) <code>{}</code> 里面的除了 <code>{</code> 的任意字符</p>
+              <p>匹配(捕获) <code>{}</code> 里面的除了 <code>{</code> 的任意字符</p>
 
             </div>
             
@@ -574,11 +565,11 @@ NOTICE: substring is faster than negative slice and RegExp</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <hr>
 <p>解析别名<br>@id 如果在 <code>data.alias[id]</code> 里面 就返回对应的数据，否者返回 <code>id</code><br>下面 parse的几个函数 具体请搜索 <code>id2Uri</code> 是如何调用的  </p>
@@ -593,11 +584,11 @@ NOTICE: substring is faster than negative slice and RegExp</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <hr>
 <p>前提：这里的 @id 是经过 <code>parseAlias</code> 先解析过一遍的<br>example: </p>
@@ -629,106 +620,7 @@ id = paths[m[<span class="hljs-number">1</span>]] + m[<span class="hljs-number">
   }
 
   <span class="hljs-keyword">return</span> id
-}
-
-<span class="hljs-comment">/*-------------------------------------------------------
-  前提：这里的 @id 是经过 parsePaths 先解析过一遍的 
-
-  seajs.config({
-    vars: {
-      'locale': 'zh-cn'
-    }
-  });
-  
-  把字符串里面的大括号里面的数据替换
-  
-  比如：
-  lang = require('./i18n/{locale}.js');
-  =&gt; lang = require('./i18n/zh-cn.js');
-  
-  怎么来的呢？
-  parseVars =&gt; id2Uri =&gt; seajs.resolve =&gt; Module.resolve =&gt; seajs.require
----------------------------------------------------------*/</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseVars</span><span class="hljs-params">(id)</span> </span>{
-  <span class="hljs-keyword">var</span> vars = data.vars
-
-  <span class="hljs-keyword">if</span> (vars &amp;&amp; id.indexOf(<span class="hljs-string">"{"</span>) &gt; -<span class="hljs-number">1</span>) {
-    id = id.replace(VARS_RE, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(m, key)</span> </span>{
-      <span class="hljs-keyword">return</span> isString(vars[key]) ? vars[key] : m
-    })
-  }
-
-  <span class="hljs-keyword">return</span> id
-}
-
-<span class="hljs-comment">/*
-  正则解析： 开头为 // 连接 任意字符 或者 :/
-  
-  也就是说 在 uri 里面找到了 //开头的，或者 :/ ，就可以判断是绝对路径了。
-  比如：//abc.com/ 或者 http://abc.com/ 
-*/</span>
-<span class="hljs-keyword">var</span> ABSOLUTE_RE = <span class="hljs-regexp">/^\/\/.|:\//</span>
-
-<span class="hljs-comment">/*
-  正则解析： 开头是任何一个字符(0个或多个，而且可有可无) 连接 // 连接 任何一个字符(0个或多个，而且可有可无) 连接 /
-  
-  取出 uri 的根目录，比如 ：
-  "https://github.com/seajs/seajs/issues/262".match(ROOT_DIR_RE)
-  =&gt;
-  ["https://github.com/"]
-*/</span>
-<span class="hljs-keyword">var</span> ROOT_DIR_RE = <span class="hljs-regexp">/^.*?\/\/.*?\//</span>
-
-<span class="hljs-comment">/*-------------------------------------------------------
-  前提：这里的 @id 是经过 normalize 先解析过一遍的
-  
-  官方说（https://github.com/seajs/seajs/issues/262）：
-      base {String}
-      Sea.js 在解析顶级标识时，会相对 base 路径来解析。详情请参阅 模块标识
-      注意：一般请不要配置 base 路径，把 sea.js 放在合适的路径往往更简单一致。
----------------------------------------------------------*/</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addBase</span><span class="hljs-params">(id, refUri)</span> </span>{
-  <span class="hljs-keyword">var</span> ret
-  <span class="hljs-keyword">var</span> first = id.charAt(<span class="hljs-number">0</span>)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-29">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
-              <p>Absolute
-绝对路径
-那么就不存在添加什么 base 路径了</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (ABSOLUTE_RE.test(id)) {
-    ret = id
-  }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
-              </div>
-              <p>Relative
-相对路径
-如果引入了 refUri，使用 refUri 的 dirname(refUri) 添加到 id 的前面，并使用 realpath 过滤一下
-如果没有引入 refUri ，就使用 cwd 添加到 id 的前面，并使用 realpath 过滤一下</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (first === <span class="hljs-string">"."</span>) {
-    ret = realpath((refUri ? dirname(refUri) : data.cwd) + id)
-  }</pre></div></div>
+}</pre></div></div>
             
         </li>
         
@@ -739,11 +631,131 @@ id = paths[m[<span class="hljs-number">1</span>]] + m[<span class="hljs-number">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>Root
-根目录
-首先得到 cwd 的根目录
-如果有，就 和 id 连接，
-如果没有(因为cwd有可能为空字符串)，就直接返回id</p>
+              <hr>
+<p>前提：这里的 @id 是经过 parsePaths 先解析过一遍的 </p>
+<pre><code>seajs.config({
+ vars: {
+   <span class="hljs-string">'locale'</span>: <span class="hljs-string">'zh-cn'</span>
+ }
+});
+</code></pre><p>把字符串里面的大括号里面的数据替换
+比如：</p>
+<pre><code>lang = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./i18n/{locale}.js'</span>); =&gt; 
+lang = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./i18n/zh-cn.js'</span>);
+</code></pre><p>怎么来的呢？
+parseVars =&gt; id2Uri =&gt; seajs.resolve =&gt; Module.resolve =&gt; seajs.require</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseVars</span><span class="hljs-params">(id)</span> </span>{
+  <span class="hljs-keyword">var</span> vars = data.vars
+
+  <span class="hljs-keyword">if</span> (vars &amp;&amp; id.indexOf(<span class="hljs-string">"{"</span>) &gt; -<span class="hljs-number">1</span>) {
+    id = id.replace(VARS_RE, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(m, key)</span> </span>{
+      <span class="hljs-keyword">return</span> isString(vars[key]) ? vars[key] : m
+    })
+  }
+
+  <span class="hljs-keyword">return</span> id
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>正则解析： 开头为 <code>//</code> 连接 任意字符 或者 <code>:/</code><br>也就是说 在 <code>uri</code> 里面找到了 <code>//</code> 开头的，或者 <code>:/</code> ，就可以判断是绝对路径了。<br>比如：<code>//abc.com/</code> 或者 <code>http://abc.com/</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> ABSOLUTE_RE = <span class="hljs-regexp">/^\/\/.|:\//</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>正则解析： 开头是任何一个字符(0个或多个，而且可有可无) 连接 // 连接 任何一个字符(0个或多个，而且可有可无) 连接 /<br>取出 <code>uri</code> 的根目录，比如 ：</p>
+<pre><code><span class="hljs-string">"https://github.com/seajs/seajs/issues/262"</span>.match(ROOT_DIR_RE)
+=&gt;
+[<span class="hljs-string">"https://github.com/"</span>]
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> ROOT_DIR_RE = <span class="hljs-regexp">/^.*?\/\/.*?\//</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <hr>
+<p>前提：这里的 @id 是经过 normalize 先解析过一遍的<br>官方说（<a href="https://github.com/seajs/seajs/issues/262）">https://github.com/seajs/seajs/issues/262）</a><br>Sea.js 在解析顶级标识时，会相对 base 路径来解析。详情请参阅 模块标识<br>注意：一般请不要配置 base 路径，把 sea.js 放在合适的路径往往更简单一致。  </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addBase</span><span class="hljs-params">(id, refUri)</span> </span>{
+  <span class="hljs-keyword">var</span> ret
+  <span class="hljs-keyword">var</span> first = id.charAt(<span class="hljs-number">0</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Absolute（绝对路径）<br>那么就不存在添加什么 base 路径了  </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (ABSOLUTE_RE.test(id)) {
+    ret = id
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Relative（相对路径）<br>如果引入了 refUri，使用 refUri 的 dirname(refUri) 添加到 id 的前面，并使用 realpath 过滤一下<br>如果没有引入 refUri ，就使用 cwd 添加到 id 的前面，并使用 realpath 过滤一下  </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (first === <span class="hljs-string">"."</span>) {
+    ret = realpath((refUri ? dirname(refUri) : data.cwd) + id)
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Root（根目录）<br>首先得到 cwd 的根目录<br>如果有，就 和 id 连接，<br>如果没有(因为cwd有可能为空字符串)，就直接返回id  </p>
 
             </div>
             
@@ -755,14 +767,13 @@ id = paths[m[<span class="hljs-number">1</span>]] + m[<span class="hljs-number">
         </li>
         
         
-        <li id="section-32">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
-              <p>Top-level
-除了前面的各种情况，才会用到你定义的 base，看来 base 要用上还挺不容易的</p>
+              <p>Top-level<br>除了前面的各种情况，才会用到你定义的 base，看来 base 要用上还挺不容易的  </p>
 
             </div>
             
@@ -773,11 +784,11 @@ id = paths[m[<span class="hljs-number">1</span>]] + m[<span class="hljs-number">
         </li>
         
         
-        <li id="section-33">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Add default protocol when uri begins with “//“</p>
 
@@ -788,25 +799,30 @@ id = paths[m[<span class="hljs-number">1</span>]] + m[<span class="hljs-number">
   }
 
   <span class="hljs-keyword">return</span> ret
-}
-
-<span class="hljs-comment">/*-------------------------------------------------------
-  说明：@uri 之前先运行的是 addBase 返回的
-  该配置可对模块路径进行映射修改，可用于路径转换、在线调试等
-  (https://github.com/seajs/seajs/issues/262)
-  
-  看了源码之后，发现rule原来还可以写函数。
-  
-  比如：
-  seajs.config({
-    map: [
-      function(uri){
-        return '/test/' + uri;
-      }
-    ]
-  });
----------------------------------------------------------*/</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseMap</span><span class="hljs-params">(uri)</span> </span>{
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <hr>
+<p>说明：@uri 之前先运行的是 addBase 返回的<br>该配置可对模块路径进行映射修改，可用于路径转换、在线调试等<br>(<a href="https://github.com/seajs/seajs/issues/262">https://github.com/seajs/seajs/issues/262</a>)<br>看了源码之后，发现rule原来还可以写函数。<br>比如：</p>
+<pre><code>seajs.config({
+ map: [
+   <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(uri)</span></span>{
+     <span class="hljs-keyword">return</span> <span class="hljs-string">'/test/'</span> + uri;
+   }
+ ]
+});
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseMap</span><span class="hljs-params">(uri)</span> </span>{
   <span class="hljs-keyword">var</span> map = data.map
   <span class="hljs-keyword">var</span> ret = uri
 
@@ -821,11 +837,11 @@ id = paths[m[<span class="hljs-number">1</span>]] + m[<span class="hljs-number">
         </li>
         
         
-        <li id="section-34">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>Only apply the first matched rule
 只要发现 uri 变化了，立即退出</p>
@@ -854,36 +870,37 @@ id = paths[m[<span class="hljs-number">1</span>]] + m[<span class="hljs-number">
 }
 
 
-<span class="hljs-keyword">var</span> doc = <span class="hljs-built_in">document</span>
-
-<span class="hljs-comment">/* 
-  当前的工作目录
-  
-  说明一下 cwd 为 "" 的情况：
-  
-  !location.href 为 true
-  说明 location.href 取不到，不是浏览器环境。直接跳出，不会判断后面的，cwd = ""
-  
-  !location.href 为 false，判断后面的
-  location.href.indexOf('about:') === 0 为 true
-  说明 location.href 极有可能进入了 空页面（about:blank），cwd = ""
-  
-  PS：吐槽一下，进入了about:开头的页面，还有可能引入得了 seajs？？
-*/</span>
-<span class="hljs-keyword">var</span> cwd = (!location.href || location.href.indexOf(<span class="hljs-string">'about:'</span>) === <span class="hljs-number">0</span>) ? <span class="hljs-string">''</span> : dirname(location.href)</pre></div></div>
+<span class="hljs-keyword">var</span> doc = <span class="hljs-built_in">document</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-35">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
-              <p>运行到 seajs 时，获取当前的 “全部” 脚本，也就是说，最后一个肯定是 seajs
-这个技巧 在 loaderScript 获取上有体现
-所以 玉伯 推荐 给引入 seajs 的 script 加上 “seajsnode” id</p>
+              <p>当前的工作目录，说明一下 <code>cwd</code> 为 “” 的情况：  </p>
+<p><code>!location.href</code> 为 <code>true</code>
+说明 <code>location.href</code> 取不到，不是浏览器环境。直接跳出，不会判断后面的，<code>cwd = &quot;&quot;</code>  </p>
+<p><code>!location.href</code> 为 <code>false</code>，判断后面的<br><code>location.href.indexOf(&#39;about:&#39;) === 0</code> 为 <code>true</code><br>说明 <code>location.href</code> 极有可能进入了 空页面（about:blank），<code>cwd = &quot;&quot;</code>  </p>
+<p>PS：吐槽一下，进入了about:开头的页面，还有可能引入得了 seajs？？</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> cwd = (!location.href || location.href.indexOf(<span class="hljs-string">'about:'</span>) === <span class="hljs-number">0</span>) ? <span class="hljs-string">''</span> : dirname(location.href)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>运行到 seajs 时，获取当前的 “全部” 脚本，也就是说，最后一个肯定是 seajs<br>这个技巧 在 loaderScript 获取上有体现<br>所以 玉伯 推荐 给引入 seajs 的 script 加上 “seajsnode” id  </p>
 
             </div>
             
@@ -892,11 +909,11 @@ id = paths[m[<span class="hljs-number">1</span>]] + m[<span class="hljs-number">
         </li>
         
         
-        <li id="section-36">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               <p>Recommend to add <code>seajsnode</code> id for the <code>sea.js</code> script element
 ref : <a href="https://github.com/seajs/seajs/issues/260">https://github.com/seajs/seajs/issues/260</a></p>
@@ -909,11 +926,11 @@ ref : <a href="https://github.com/seajs/seajs/issues/260">https://github.com/sea
         </li>
         
         
-        <li id="section-37">
+        <li id="section-45">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
               <p>When <code>sea.js</code> is inline, set loaderDir to current working directory</p>
 
@@ -928,11 +945,11 @@ ref : <a href="https://github.com/seajs/seajs/issues/260">https://github.com/sea
         </li>
         
         
-        <li id="section-38">
+        <li id="section-46">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
               <p>see <a href="http://msdn.microsoft.com/en-us/library/ms536429(VS.85).aspx">http://msdn.microsoft.com/en-us/library/ms536429(VS.85).aspx</a></p>
 
@@ -944,21 +961,33 @@ ref : <a href="https://github.com/seajs/seajs/issues/260">https://github.com/sea
         </li>
         
         
-        <li id="section-39">
+        <li id="section-47">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-47">&#182;</a>
               </div>
               <p>For Developers
 暴露出去 :D</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>seajs.resolve = id2Uri
+            <div class="content"><div class='highlight'><pre>seajs.resolve = id2Uri</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <hr>
 
-
-<span class="hljs-comment">/**
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
  * util-request.js - The utilities for requesting script and style files
  * ref: tests/research/load-js-css/test.html
  */</span>
@@ -979,19 +1008,32 @@ ref : <a href="https://github.com/seajs/seajs/issues/260">https://github.com/sea
     }
   }
 
-  addOnload(node, callback, url)
+  addOnload(node, callback, url)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>async，HTML5中的script属性<br>脚本会相对于文档的其余部分异步执行，这样脚本会可以在页面继续解析的过程中来执行</p>
 
-  node.async = <span class="hljs-literal">true</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  node.async = <span class="hljs-literal">true</span>
   node.src = url</pre></div></div>
             
         </li>
         
         
-        <li id="section-40">
+        <li id="section-50">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
               <p>For some cache cases in IE 6-8, the script executes IMMEDIATELY after
 the end of the insert execution, so use <code>currentlyAddingScript</code> to
@@ -1004,13 +1046,13 @@ hold current node, for deriving url in <code>define</code> call</p>
         </li>
         
         
-        <li id="section-41">
+        <li id="section-51">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-51">&#182;</a>
               </div>
-              <p>ref: #185 &amp; <a href="http://dev.jquery.com/ticket/2709">http://dev.jquery.com/ticket/2709</a></p>
+              <p>ref: #185 &amp; <a href="http://dev.jquery.com/ticket/2709">http://dev.jquery.com/ticket/2709</a><br>IE6的一个bug :(</p>
 
             </div>
             
@@ -1019,9 +1061,22 @@ hold current node, for deriving url in <code>define</code> call</p>
       head.appendChild(node)
 
   currentlyAddingScript = <span class="hljs-literal">null</span>
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>动态加载脚本，加载完毕后，触发 <code>@callback</code></p>
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOnload</span><span class="hljs-params">(node, callback, url)</span> </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOnload</span><span class="hljs-params">(node, callback, url)</span> </span>{
   <span class="hljs-keyword">var</span> supportOnload = <span class="hljs-string">"onload"</span> <span class="hljs-keyword">in</span> node
 
   <span class="hljs-keyword">if</span> (supportOnload) {
@@ -1044,13 +1099,13 @@ hold current node, for deriving url in <code>define</code> call</p>
         </li>
         
         
-        <li id="section-42">
+        <li id="section-53">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-53">&#182;</a>
               </div>
-              <p>Ensure only run once and handle memory leak in IE</p>
+              <p>Ensure only run once and handle memory leak in IE<br>确保只允许一次，处理IE的内存泄漏</p>
 
             </div>
             
@@ -1059,27 +1114,13 @@ hold current node, for deriving url in <code>define</code> call</p>
         </li>
         
         
-        <li id="section-43">
+        <li id="section-54">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-54">&#182;</a>
               </div>
-              <p>Remove the script to reduce memory leak</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-44">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
-              </div>
-              <p>如果 debug 设置为 true ，就不会删除 动态插入的script标签 (by paper)
-<a href="https://github.com/seajs/seajs/issues/262">https://github.com/seajs/seajs/issues/262</a></p>
+              <p>Remove the script to reduce memory leak<br>如果 debug 设置为 true ，就不会删除 动态插入的script标签<br><a href="https://github.com/seajs/seajs/issues/262">https://github.com/seajs/seajs/issues/262</a>  </p>
 
             </div>
             
@@ -1090,11 +1131,11 @@ hold current node, for deriving url in <code>define</code> call</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-55">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-55">&#182;</a>
               </div>
               <p>Dereference the node</p>
 
@@ -1104,9 +1145,22 @@ hold current node, for deriving url in <code>define</code> call</p>
 
     callback()
   }
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>获取当前，正在请求的脚本</p>
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCurrentScript</span><span class="hljs-params">()</span> </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCurrentScript</span><span class="hljs-params">()</span> </span>{
   <span class="hljs-keyword">if</span> (currentlyAddingScript) {
     <span class="hljs-keyword">return</span> currentlyAddingScript
   }</pre></div></div>
@@ -1114,11 +1168,11 @@ hold current node, for deriving url in <code>define</code> call</p>
         </li>
         
         
-        <li id="section-46">
+        <li id="section-57">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
+                <a class="pilcrow" href="#section-57">&#182;</a>
               </div>
               <p>For IE6-9 browsers, the script onload event may not fire right
 after the script is evaluated. Kris Zyp found that it
@@ -1146,63 +1200,82 @@ ref: <a href="http://goo.gl/JHfFW">http://goo.gl/JHfFW</a></p>
         </li>
         
         
-        <li id="section-47">
+        <li id="section-58">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-58">&#182;</a>
               </div>
               <p>For Developers</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>seajs.request = request
-
-
-<span class="hljs-comment">/**
- * util-deps.js - The parser for dependencies
- * ref: tests/research/parse-dependencies/test.html
- */</span>
-
- 
-<span class="hljs-comment">/*-------------------------------------------------------
-  "(?:\\"|[^"])*"
-  (非捕获) 获取 双引号 里面的内容
-
-  '(?:\\'|[^'])*'
-  (非捕获) 获取 单引号 里面的内容
-
-  \/\*[\S\s]*?\*\/
-  获取 多行注释	里面的内容
-
-  \/(?:\\\/|[^\/\r\n])+\/(?=[^\/])
-  (非捕获) 获取正则表达式里面的内容
-
-  \/\/.*
-  获取单行注释 内容
-
-  \.\s*require
-  获取  .require
-
-  (?:^|[^$])\brequire\s*\(\s*(["'])(.+?)\1\s*\)
-  (捕获) 获取  require("任何字符") 或者 require('任何字符')
----------------------------------------------------------*/</span>
-<span class="hljs-keyword">var</span> REQUIRE_RE = <span class="hljs-regexp">/"(?:\\"|[^"])*"|'(?:\\'|[^'])*'|\/\*[\S\s]*?\*\/|\/(?:\\\/|[^\/\r\n])+\/(?=[^\/])|\/\/.*|\.\s*require|(?:^|[^$])\brequire\s*\(\s*(["'])(.+?)\1\s*\)/g</span>
-
-
-
-<span class="hljs-keyword">var</span> SLASH_RE = <span class="hljs-regexp">/\\\\/g</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>seajs.request = request</pre></div></div>
             
         </li>
         
         
-        <li id="section-48">
+        <li id="section-59">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-48">&#182;</a>
+                <a class="pilcrow" href="#section-59">&#182;</a>
               </div>
-              <p>通过解析code 源码，找出 require 的 内容，然后存到 deps 里面
+              <hr>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ * util-deps.js - The parser for dependencies
+ * ref: tests/research/parse-dependencies/test.html
+ */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p><code>&quot;(?:\\&quot;|[^&quot;])*&quot;</code><br>(非捕获) 获取 双引号 里面的内容</p>
+<p><code>&#39;(?:\\&#39;|[^&#39;])*&#39;</code><br>(非捕获) 获取 单引号 里面的内容</p>
+<p><code>\/\*[\S\s]*?\*\/</code><br>获取 多行注释    里面的内容</p>
+<p><code>\/(?:\\\/|[^\/\r\n])+\/(?=[^\/])</code><br>(非捕获) 获取正则表达式里面的内容</p>
+<p><code>\/\/.*</code><br>获取单行注释 内容</p>
+<p><code>\.\s*require</code><br>获取  .require</p>
+<p><code>(?:^|[^$])\brequire\s*\(\s*([&quot;&#39;])(.+?)\1\s*\)</code><br>(捕获) 获取  require(“任何字符”) 或者 require(‘任何字符’)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> REQUIRE_RE = <span class="hljs-regexp">/"(?:\\"|[^"])*"|'(?:\\'|[^'])*'|\/\*[\S\s]*?\*\/|\/(?:\\\/|[^\/\r\n])+\/(?=[^\/])|\/\/.*|\.\s*require|(?:^|[^$])\brequire\s*\(\s*(["'])(.+?)\1\s*\)/g</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>双斜杠</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> SLASH_RE = <span class="hljs-regexp">/\\\\/g</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-62">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>解析依赖<br>通过解析 <code>code</code> 源码，找出 <code>require</code> 的内容，然后存到 <code>deps</code> 里面。
 module.dependencies</p>
 
             </div>
@@ -1226,10 +1299,23 @@ module.dependencies</p>
       })
 
   <span class="hljs-keyword">return</span> ret
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-63">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-63">&#182;</a>
+              </div>
+              <hr>
+<p>seajs 最复杂的地方</p>
 
-
-<span class="hljs-comment">/**
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
  * module.js - The core of module loader
  */</span>
 
@@ -1238,20 +1324,34 @@ module.dependencies</p>
 
 <span class="hljs-keyword">var</span> fetchingList = {}
 <span class="hljs-keyword">var</span> fetchedList = {}
-<span class="hljs-keyword">var</span> callbackList = {}
-
-<span class="hljs-keyword">var</span> STATUS = Module.STATUS = {</pre></div></div>
+<span class="hljs-keyword">var</span> callbackList = {}</pre></div></div>
             
         </li>
         
         
-        <li id="section-49">
+        <li id="section-64">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-49">&#182;</a>
+                <a class="pilcrow" href="#section-64">&#182;</a>
               </div>
-              <p>1 - The <code>module.uri</code> is being fetched</p>
+              <p>模块状态码</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> STATUS = Module.STATUS = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-65">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-65">&#182;</a>
+              </div>
+              <p>1 - The <code>module.uri</code> is being fetched
+正在获取中。。。</p>
 
             </div>
             
@@ -1260,13 +1360,14 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-50">
+        <li id="section-66">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-50">&#182;</a>
+                <a class="pilcrow" href="#section-66">&#182;</a>
               </div>
-              <p>2 - The meta data has been saved to cachedMods</p>
+              <p>2 - The meta data has been saved to cachedMods
+基本数据已经保存到 缓存模块里面了</p>
 
             </div>
             
@@ -1275,13 +1376,14 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-51">
+        <li id="section-67">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-51">&#182;</a>
+                <a class="pilcrow" href="#section-67">&#182;</a>
               </div>
-              <p>3 - The <code>module.dependencies</code> are being loaded</p>
+              <p>3 - The <code>module.dependencies</code> are being loaded
+模块依赖 正在加载中。。。</p>
 
             </div>
             
@@ -1290,13 +1392,14 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-52">
+        <li id="section-68">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-52">&#182;</a>
+                <a class="pilcrow" href="#section-68">&#182;</a>
               </div>
-              <p>4 - The module are ready to execute</p>
+              <p>4 - The module are ready to execute
+模块解析完毕</p>
 
             </div>
             
@@ -1305,13 +1408,14 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-53">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-53">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
-              <p>5 - The module is being executed</p>
+              <p>5 - The module is being executed
+模块正在执行中</p>
 
             </div>
             
@@ -1320,21 +1424,34 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-54">
+        <li id="section-70">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
+                <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
-              <p>6 - The <code>module.exports</code> is available</p>
+              <p>6 - The <code>module.exports</code> is available
+module.exports 是可用的</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  EXECUTED: <span class="hljs-number">6</span>
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-71">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-71">&#182;</a>
+              </div>
+              <p>模块对象<br><code>@uri</code> 模块的路径，唯一标识符<br><code>@deps</code> 模块的依赖</p>
 
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Module</span><span class="hljs-params">(uri, deps)</span> </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Module</span><span class="hljs-params">(uri, deps)</span> </span>{
   <span class="hljs-keyword">this</span>.uri = uri
   <span class="hljs-keyword">this</span>.dependencies = deps || []
   <span class="hljs-keyword">this</span>.exports = <span class="hljs-literal">null</span>
@@ -1343,13 +1460,14 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-55">
+        <li id="section-72">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
+                <a class="pilcrow" href="#section-72">&#182;</a>
               </div>
-              <p>Who depends on me</p>
+              <p>Who depends on me<br>有多少个依赖模块需要等“我”（应该是本mod）加载完毕
+比如 “A” 模块 依赖 “$”，如果 “A”没有加载完毕， 那么 $._waitings[“A”] = 1</p>
 
             </div>
             
@@ -1358,13 +1476,13 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-56">
+        <li id="section-73">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-56">&#182;</a>
+                <a class="pilcrow" href="#section-73">&#182;</a>
               </div>
-              <p>The number of unloaded dependencies</p>
+              <p>The number of unloaded dependencies<br>没有加载依赖的个数</p>
 
             </div>
             
@@ -1374,13 +1492,13 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-57">
+        <li id="section-74">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-57">&#182;</a>
+                <a class="pilcrow" href="#section-74">&#182;</a>
               </div>
-              <p>Resolve module.dependencies</p>
+              <p>Resolve module.dependencies<br>把依赖的简称( 代码里面require里面的字符串 ) 变成 真实的js路径</p>
 
             </div>
             
@@ -1398,13 +1516,14 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-58">
+        <li id="section-75">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-58">&#182;</a>
+                <a class="pilcrow" href="#section-75">&#182;</a>
               </div>
-              <p>Load module.dependencies and fire onload when all done</p>
+              <p>Load module.dependencies and fire onload when all done<br>模块加载阶段，只有当模块里面的依赖全部加载完毕了，才能触发onload事件</p>
+<p>当一个模块A里面含有 require(“b”); require(“c”);<br>肯定是要等加载完 b 和 c 这两个模块，才能做A的事情</p>
 
             </div>
             
@@ -1414,11 +1533,11 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-59">
+        <li id="section-76">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-59">&#182;</a>
+                <a class="pilcrow" href="#section-76">&#182;</a>
               </div>
               <p>If the module is being loaded, just wait it onload call</p>
 
@@ -1433,61 +1552,130 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-60">
+        <li id="section-77">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-60">&#182;</a>
+                <a class="pilcrow" href="#section-77">&#182;</a>
               </div>
-              <p>Emit <code>load</code> event for plugins such as combo plugin</p>
+              <p>Emit <code>load</code> event for plugins such as combo plugin<br>为开发插件做准备。插件可以自定义 seajs.on(“load”, callback);<br>比如 combo 插件，把uri拼在一起，节省http请求  </p>
+<p>当使用 <code>seajs.use</code> 时，<code>uris</code> 包括前面的 <code>ids</code> 
+所以即使 <code>use</code> 一个模块，而且模块不依赖任何其他模块时，<code>_remain</code> 也为 1</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> uris = mod.resolve()
-  emit(<span class="hljs-string">"load"</span>, uris)
+  emit(<span class="hljs-string">"load"</span>, uris)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-78">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-78">&#182;</a>
+              </div>
+              <p>依赖模块的个数（包括它自己的uri）</p>
 
-  <span class="hljs-keyword">var</span> len = mod._remain = uris.length
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> len = mod._remain = uris.length
   <span class="hljs-keyword">var</span> m</pre></div></div>
             
         </li>
         
         
-        <li id="section-61">
+        <li id="section-79">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-61">&#182;</a>
+                <a class="pilcrow" href="#section-79">&#182;</a>
               </div>
               <p>Initialize modules and register waitings</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) {
-    m = Module.get(uris[i])
-
-    <span class="hljs-keyword">if</span> (m.status &lt; STATUS.LOADED) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) {</pre></div></div>
             
         </li>
         
         
-        <li id="section-62">
+        <li id="section-80">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-62">&#182;</a>
+                <a class="pilcrow" href="#section-80">&#182;</a>
               </div>
-              <p>Maybe duplicate: When module has dupliate dependency, it should be it’s count, not 1</p>
+              <p>得到需要依赖的 <code>uris[i]</code> 对应的模块，如果<code>cachedMods</code>缓存里面有，就拿缓存的<br>如果没有，就调用 <code>new Module(uri, deps)</code> 来获取，并存入<code>cachedMods</code>中</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    m = Module.get(uris[i])</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-81">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-81">&#182;</a>
+              </div>
+              <p>如果 m 模块没有加载完毕</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (m.status &lt; STATUS.LOADED) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-82">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-82">&#182;</a>
+              </div>
+              <p>Maybe duplicate: When module has dupliate dependency, it should be it’s count, not 1<br>如果 mod.uri 等待数已经存在(说明并发了)，那么再加 1</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>      m._waitings[mod.uri] = (m._waitings[mod.uri] || <span class="hljs-number">0</span>) + <span class="hljs-number">1</span>
-    }
-    <span class="hljs-keyword">else</span> {
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-83">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-83">&#182;</a>
+              </div>
+              <p>加载完毕了，剩余依赖模块减 1</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">else</span> {
       mod._remain--
     }
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-84">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-84">&#182;</a>
+              </div>
+              <p>如果依赖全部加载解析完毕，就调用onload事件</p>
 
-  <span class="hljs-keyword">if</span> (mod._remain === <span class="hljs-number">0</span>) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (mod._remain === <span class="hljs-number">0</span>) {
     mod.onload()
     <span class="hljs-keyword">return</span>
   }</pre></div></div>
@@ -1495,13 +1683,13 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-63">
+        <li id="section-85">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-63">&#182;</a>
+                <a class="pilcrow" href="#section-85">&#182;</a>
               </div>
-              <p>Begin parallel loading</p>
+              <p>Begin parallel loading<br>开始并行加载模块</p>
 
             </div>
             
@@ -1510,8 +1698,22 @@ module.dependencies</p>
   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; len; i++) {
     m = cachedMods[uris[i]]
 
-    <span class="hljs-keyword">if</span> (m.status &lt; STATUS.FETCHING) {
-      m.fetch(requestCache)
+    <span class="hljs-keyword">if</span> (m.status &lt; STATUS.FETCHING) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-86">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-86">&#182;</a>
+              </div>
+              <p>requestCache 对象引用传入 fetch</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      m.fetch(requestCache)
     }
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (m.status === STATUS.SAVED) {
       m.load()
@@ -1521,13 +1723,13 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-64">
+        <li id="section-87">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-64">&#182;</a>
+                <a class="pilcrow" href="#section-87">&#182;</a>
               </div>
-              <p>Send all requests at last to avoid cache bug in IE6-9. Issues#808</p>
+              <p>Send all requests at last to avoid cache bug in IE6-9. Issues#808<br>通过 <code>fetch</code> 函数，把请求函数 <code>sendRequest</code> 放入到对应的 <code>requestCache[requestUri]</code> 中<br>然后运行，进行脚本获取（就是运行 seajs.request）</p>
 
             </div>
             
@@ -1541,34 +1743,48 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-65">
+        <li id="section-88">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-65">&#182;</a>
+                <a class="pilcrow" href="#section-88">&#182;</a>
               </div>
-              <p>Call this method when module is loaded</p>
+              <p>Call this method when module is loaded<br>当模块完全加载完毕时，会调用这个方法<br>就是楼上的 <code>if (mod._remain === 0)</code></p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>Module.prototype.onload = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
   <span class="hljs-keyword">var</span> mod = <span class="hljs-keyword">this</span>
-  mod.status = STATUS.LOADED
+  mod.status = STATUS.LOADED</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-89">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-89">&#182;</a>
+              </div>
+              <p>为 <code>Module.use</code> 准备的<br>模块加载完毕后，就可以调用 <code>callback</code> 函数，进行回调了</p>
 
-  <span class="hljs-keyword">if</span> (mod.callback) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (mod.callback) {
     mod.callback()
   }</pre></div></div>
             
         </li>
         
         
-        <li id="section-66">
+        <li id="section-90">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-66">&#182;</a>
+                <a class="pilcrow" href="#section-90">&#182;</a>
               </div>
-              <p>Notify waiting modules to fire onload</p>
+              <p>Notify waiting modules to fire onload
+通知等待的模块（依赖mod模块的模块）</p>
 
             </div>
             
@@ -1577,8 +1793,28 @@ module.dependencies</p>
 
   <span class="hljs-keyword">for</span> (uri <span class="hljs-keyword">in</span> waitings) {
     <span class="hljs-keyword">if</span> (waitings.hasOwnProperty(uri)) {
-      m = cachedMods[uri]
-      m._remain -= waitings[uri]
+      m = cachedMods[uri]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-91">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-91">&#182;</a>
+              </div>
+              <ol>
+<li>mod 是 m 的全部依赖模块之一（或唯一）</li>
+<li>mod._waitings[m] 的种类（就是说 mod 是各种各样 m 依赖的模块），应该和 m._remain 的值一样 </li>
+<li>mod 加载完毕后，通知 m，我加载完毕了，你的 _remain 可以减去 mod._waitings[m] 的 waitings 值</li>
+<li>如果发现 _remain == 0，说明 m 的依赖就全部加载完毕了。</li>
+<li>那么 m 也可以说算是真正的 onload 的了。就可以执行了（exec）</li>
+</ol>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      m._remain -= waitings[uri]
       <span class="hljs-keyword">if</span> (m._remain === <span class="hljs-number">0</span>) {
         m.onload()
       }
@@ -1588,13 +1824,13 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-67">
+        <li id="section-92">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-67">&#182;</a>
+                <a class="pilcrow" href="#section-92">&#182;</a>
               </div>
-              <p>Reduce memory taken</p>
+              <p>Reduce memory taken<br>删除不必要的属性，减少内存</p>
 
             </div>
             
@@ -1605,13 +1841,13 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-68">
+        <li id="section-93">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-68">&#182;</a>
+                <a class="pilcrow" href="#section-93">&#182;</a>
               </div>
-              <p>Fetch a module</p>
+              <p>Fetch a module (获取一个模块)<br>吐槽：获取这个函数，怎么不放在第一位？应该按照 status 的顺序来写函数啊</p>
 
             </div>
             
@@ -1624,39 +1860,66 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-69">
+        <li id="section-94">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-69">&#182;</a>
+                <a class="pilcrow" href="#section-94">&#182;</a>
               </div>
               <p>Emit <code>fetch</code> event for plugins such as combo plugin</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> emitData = { uri: uri }
-  emit(<span class="hljs-string">"fetch"</span>, emitData)
-  <span class="hljs-keyword">var</span> requestUri = emitData.requestUri || uri</pre></div></div>
+  emit(<span class="hljs-string">"fetch"</span>, emitData)</pre></div></div>
             
         </li>
         
         
-        <li id="section-70">
+        <li id="section-95">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-70">&#182;</a>
+                <a class="pilcrow" href="#section-95">&#182;</a>
               </div>
-              <p>Empty uri or a non-CMD module</p>
+              <p>如果插件使用了 <code>requestUri</code> ，那么就覆盖原来的 <code>uri</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> requestUri = emitData.requestUri || uri</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-96">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-96">&#182;</a>
+              </div>
+              <p>Empty uri or a non-CMD module<br>错误的 <code>requestUri</code> 或者这个 <code>requestUri</code> 已经获取成功了</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (!requestUri || fetchedList[requestUri]) {
     mod.load()
     <span class="hljs-keyword">return</span>
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-97">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-97">&#182;</a>
+              </div>
+              <p>如果已经获取过了这个 requestUri<br>就直接</p>
 
-  <span class="hljs-keyword">if</span> (fetchingList[requestUri]) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (fetchingList[requestUri]) {
     callbackList[requestUri].push(mod)
     <span class="hljs-keyword">return</span>
   }
@@ -1667,11 +1930,11 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-71">
+        <li id="section-98">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-71">&#182;</a>
+                <a class="pilcrow" href="#section-98">&#182;</a>
               </div>
               <p>Emit <code>request</code> event for plugins such as text plugin</p>
 
@@ -1682,32 +1945,85 @@ module.dependencies</p>
     requestUri: requestUri,
     onRequest: onRequest,
     charset: data.charset
-  })
+  })</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-99">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-99">&#182;</a>
+              </div>
+              <p>如果插件设置 <code>requested</code> 属性为 <code>true</code> ，就pass</p>
 
-  <span class="hljs-keyword">if</span> (!emitData.requested) {
-    requestCache ?
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (!emitData.requested) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-100">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-100">&#182;</a>
+              </div>
+              <p>就目前来看 <code>requestCache</code> 永远为 <code>true</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    requestCache ?
         requestCache[emitData.requestUri] = sendRequest :
         sendRequest()
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-101">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-101">&#182;</a>
+              </div>
+              <p>发送请求</p>
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendRequest</span><span class="hljs-params">()</span> </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendRequest</span><span class="hljs-params">()</span> </span>{
     seajs.request(emitData.requestUri, emitData.onRequest, emitData.charset)
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-102">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-102">&#182;</a>
+              </div>
+              <p>发送完请求，动态加载完脚本后，就会运行这个函数</p>
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onRequest</span><span class="hljs-params">()</span> </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onRequest</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">delete</span> fetchingList[requestUri]
     fetchedList[requestUri] = <span class="hljs-literal">true</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-72">
+        <li id="section-103">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-72">&#182;</a>
+                <a class="pilcrow" href="#section-103">&#182;</a>
               </div>
-              <p>Save meta data of anonymous module</p>
+              <p>Save meta data of anonymous module<br>把 <code>define</code> 函数里面的 <code>anonymousMeta</code>数据（如果有）就save起来</p>
 
             </div>
             
@@ -1719,13 +2035,13 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-73">
+        <li id="section-104">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-73">&#182;</a>
+                <a class="pilcrow" href="#section-104">&#182;</a>
               </div>
-              <p>Call callbacks</p>
+              <p>Call callbacks<br>逐个运行放入请求列表里面的模块的load方法</p>
 
             </div>
             
@@ -1738,13 +2054,13 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-74">
+        <li id="section-105">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-74">&#182;</a>
+                <a class="pilcrow" href="#section-105">&#182;</a>
               </div>
-              <p>Execute a module</p>
+              <p>Execute a module (执行一个模块)</p>
 
             </div>
             
@@ -1754,11 +2070,11 @@ module.dependencies</p>
         </li>
         
         
-        <li id="section-75">
+        <li id="section-106">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-75">&#182;</a>
+                <a class="pilcrow" href="#section-106">&#182;</a>
               </div>
               <p>When module is executed, DO NOT execute it again. When module
 is being executed, just return <code>module.exports</code> too, for avoiding
@@ -1768,26 +2084,52 @@ circularly calling</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (mod.status &gt;= STATUS.EXECUTING) {
     <span class="hljs-keyword">return</span> mod.exports
-  }
-
-  mod.status = STATUS.EXECUTING</pre></div></div>
+  }</pre></div></div>
             
         </li>
         
         
-        <li id="section-76">
+        <li id="section-107">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-76">&#182;</a>
+                <a class="pilcrow" href="#section-107">&#182;</a>
+              </div>
+              <p>设置 状态 ： 正在解析中。。。<br>避免重复运行 exec，导致循环调用</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  mod.status = STATUS.EXECUTING</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-108">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-108">&#182;</a>
               </div>
               <p>Create require</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> uri = mod.uri
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> uri = mod.uri</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-109">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-109">&#182;</a>
+              </div>
+              <p>define 里面 factory 的参数 require 有哪些功能<br>看这里就知道了</p>
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">require</span><span class="hljs-params">(id)</span> </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">require</span><span class="hljs-params">(id)</span> </span>{
     <span class="hljs-keyword">return</span> Module.get(<span class="hljs-built_in">require</span>.resolve(id)).exec()
   }
 
@@ -1803,36 +2145,63 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-77">
+        <li id="section-110">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-77">&#182;</a>
+                <a class="pilcrow" href="#section-110">&#182;</a>
               </div>
               <p>Exec factory</p>
+<p><code>mod.factory</code><br>这里的 <code>factory</code> 是来自 <code>Module.define</code> 里面定义的 <code>factory</code>，<br>经过 <code>Module.save</code> 存储起来的</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> factory = mod.factory
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> factory = mod.factory</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-111">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-111">&#182;</a>
+              </div>
+              <p>运行<code>factory</code>，把运行结果给 <code>exports</code><br>第二个参数 <code>exports</code> 是一个对象，并且 <code>mod.exports</code> 是另外一个引用  </p>
 
-  <span class="hljs-keyword">var</span> exports = isFunction(factory) ?
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> exports = isFunction(factory) ?
       factory(<span class="hljs-built_in">require</span>, mod.exports = {}, mod) :
-      factory
+      factory</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-112">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-112">&#182;</a>
+              </div>
+              <p>如果 <code>factory</code> 没有使用<code>return</code> ，用的是 <code>module.expotrs = fn</code>;<br>因为 <code>mod.exports</code> 是 <code>factory</code>第2个参数<code>exports</code>的一个引用，<br>所以可以得到 <code>module.expotrs</code> 的值<br>那么也就相当于 <code>return fn;</code></p>
 
-  <span class="hljs-keyword">if</span> (exports === <span class="hljs-literal">undefined</span>) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (exports === <span class="hljs-literal">undefined</span>) {
     exports = mod.exports
   }</pre></div></div>
             
         </li>
         
         
-        <li id="section-78">
+        <li id="section-113">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-78">&#182;</a>
+                <a class="pilcrow" href="#section-113">&#182;</a>
               </div>
-              <p>Reduce memory leak</p>
+              <p>Reduce memory leak<br>得到结果后，就可以删除函数了，免得占内存</p>
 
             </div>
             
@@ -1844,11 +2213,11 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-79">
+        <li id="section-114">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-79">&#182;</a>
+                <a class="pilcrow" href="#section-114">&#182;</a>
               </div>
               <p>Emit <code>exec</code> event</p>
 
@@ -1862,11 +2231,11 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-80">
+        <li id="section-115">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-80">&#182;</a>
+                <a class="pilcrow" href="#section-115">&#182;</a>
               </div>
               <p>Resolve id to uri</p>
 
@@ -1877,11 +2246,11 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-81">
+        <li id="section-116">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-81">&#182;</a>
+                <a class="pilcrow" href="#section-116">&#182;</a>
               </div>
               <p>Emit <code>resolve</code> event for plugins such as text plugin</p>
 
@@ -1889,20 +2258,20 @@ circularly calling</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> emitData = { id: id, refUri: refUri }
   emit(<span class="hljs-string">"resolve"</span>, emitData)
-
+  
   <span class="hljs-keyword">return</span> emitData.uri || seajs.resolve(emitData.id, refUri)
 }</pre></div></div>
             
         </li>
         
         
-        <li id="section-82">
+        <li id="section-117">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-82">&#182;</a>
+                <a class="pilcrow" href="#section-117">&#182;</a>
               </div>
-              <p>Define a module</p>
+              <p>Define a module (定义一个模块)</p>
 
             </div>
             
@@ -1912,13 +2281,13 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-83">
+        <li id="section-118">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-83">&#182;</a>
+                <a class="pilcrow" href="#section-118">&#182;</a>
               </div>
-              <p>define(factory)</p>
+              <p>define(factory)<br>大部分是这种情况</p>
 
             </div>
             
@@ -1932,11 +2301,11 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-84">
+        <li id="section-119">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-84">&#182;</a>
+                <a class="pilcrow" href="#section-119">&#182;</a>
               </div>
               <p>define(deps, factory)</p>
 
@@ -1950,11 +2319,11 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-85">
+        <li id="section-120">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-85">&#182;</a>
+                <a class="pilcrow" href="#section-120">&#182;</a>
               </div>
               <p>define(id, factory)</p>
 
@@ -1968,21 +2337,34 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-86">
+        <li id="section-121">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-86">&#182;</a>
+                <a class="pilcrow" href="#section-121">&#182;</a>
               </div>
-              <p>Parse dependencies according to the module factory code</p>
+              <p>Parse dependencies according to the module factory code<br>函数 经过 <code>toString()</code> ，变成字符串，通过<code>parseDependencies</code>解析字符串，得到依赖</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (!isArray(deps) &amp;&amp; isFunction(factory)) {
     deps = parseDependencies(factory.toString())
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-122">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-122">&#182;</a>
+              </div>
+              <p>得到基本元数据</p>
 
-  <span class="hljs-keyword">var</span> meta = {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> meta = {
     id: id,
     uri: Module.resolve(id),
     deps: deps,
@@ -1992,13 +2374,13 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-87">
+        <li id="section-123">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-87">&#182;</a>
+                <a class="pilcrow" href="#section-123">&#182;</a>
               </div>
-              <p>Try to derive uri in IE6-9 for anonymous modules</p>
+              <p>Try to derive uri in IE6-9 for anonymous modul es</p>
 
             </div>
             
@@ -2012,11 +2394,11 @@ circularly calling</p>
         </li>
         
         
-        <li id="section-88">
+        <li id="section-124">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-88">&#182;</a>
+                <a class="pilcrow" href="#section-124">&#182;</a>
               </div>
               <p>NOTE: If the id-deriving methods above is failed, then falls back
 to use onload event to get the uri</p>
@@ -2028,28 +2410,41 @@ to use onload event to get the uri</p>
         </li>
         
         
-        <li id="section-89">
+        <li id="section-125">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-89">&#182;</a>
+                <a class="pilcrow" href="#section-125">&#182;</a>
               </div>
               <p>Emit <code>define</code> event, used in nocache plugin, seajs node version etc</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  emit(<span class="hljs-string">"define"</span>, meta)
-
-  meta.uri ? Module.save(meta.uri, meta) :</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  emit(<span class="hljs-string">"define"</span>, meta)</pre></div></div>
             
         </li>
         
         
-        <li id="section-90">
+        <li id="section-126">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-90">&#182;</a>
+                <a class="pilcrow" href="#section-126">&#182;</a>
+              </div>
+              <p>save </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  meta.uri ? Module.save(meta.uri, meta) :</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-127">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-127">&#182;</a>
               </div>
               <p>Save information for “saving” work in the script onload event</p>
 
@@ -2061,13 +2456,13 @@ to use onload event to get the uri</p>
         </li>
         
         
-        <li id="section-91">
+        <li id="section-128">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-91">&#182;</a>
+                <a class="pilcrow" href="#section-128">&#182;</a>
               </div>
-              <p>Save meta data to cachedMods</p>
+              <p>Save meta data to cachedMods (存储 元数据 到 缓存模块)</p>
 
             </div>
             
@@ -2077,13 +2472,13 @@ to use onload event to get the uri</p>
         </li>
         
         
-        <li id="section-92">
+        <li id="section-129">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-92">&#182;</a>
+                <a class="pilcrow" href="#section-129">&#182;</a>
               </div>
-              <p>Do NOT override already saved modules</p>
+              <p>Do NOT override already saved modules<br>不覆盖已经被存储的 模块<br>如果 <code>mod</code> 是新的，就存储数据。如果发现<code>mod</code>已经存在，就pass</p>
 
             </div>
             
@@ -2100,13 +2495,13 @@ to use onload event to get the uri</p>
         </li>
         
         
-        <li id="section-93">
+        <li id="section-130">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-93">&#182;</a>
+                <a class="pilcrow" href="#section-130">&#182;</a>
               </div>
-              <p>Get an existed module or create a new one</p>
+              <p>Get an existed module or create a new one<br>如果 uri 已经在缓存里面，就取缓存<br>如果没有，就创建新的  </p>
 
             </div>
             
@@ -2117,19 +2512,48 @@ to use onload event to get the uri</p>
         </li>
         
         
-        <li id="section-94">
+        <li id="section-131">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-94">&#182;</a>
+                <a class="pilcrow" href="#section-131">&#182;</a>
               </div>
-              <p>Use function is equal to load a anonymous module</p>
+              <p>Use function is equal to load a anonymous module<br>use 方法，其实就是加载一个匿名模块  </p>
+<pre><code>seajs.use(<span class="hljs-string">"jq"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($)</span></span>{
+ <span class="hljs-comment">// $ 就是 jq</span>
+});
+</code></pre><ol>
+<li>先把 “jq” 变成 [“jq”]; 如果本身就是数组，就不变</li>
+<li>得到依赖后，逐个执行（exec）</li>
+<li><code>callback</code> 里面的参数 <code>exports</code> 就变成了真正的模块</li>
+</ol>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Module.use = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(ids, callback, uri)</span> </span>{
-  <span class="hljs-keyword">var</span> mod = Module.get(uri, isArray(ids) ? ids : [ids])
+            <div class="content"><div class='highlight'><pre>Module.use = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(ids, callback, uri)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-132">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-132">&#182;</a>
+              </div>
+              <p>当 <code>seajs.use</code> 或者 <code>require.async</code> 运行时，<code>mod</code> 永远都是最新的模块<br>因为 <code>uri</code> 是自增的，永不重复的地址</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> mod = Module.get(uri, isArray(ids) ? ids : [ids])
+  
+  <span class="hljs-comment">/*
+    Module.prototype.onload 里面有一段：
+    
+    if (mod.callback) {
+      mod.callback()
+    }
+  */</span>
   mod.callback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> exports = []
     <span class="hljs-keyword">var</span> uris = mod.resolve()
@@ -2143,41 +2567,80 @@ to use onload event to get the uri</p>
     }
 
     <span class="hljs-keyword">delete</span> mod.callback
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-133">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-133">&#182;</a>
+              </div>
+              <p>等用户 <code>use</code> 的时候，才开始按需加载模块</p>
 
-  mod.load()
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  mod.load()
 }</pre></div></div>
             
         </li>
         
         
-        <li id="section-95">
+        <li id="section-134">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-95">&#182;</a>
+                <a class="pilcrow" href="#section-134">&#182;</a>
               </div>
-              <p>Public API</p>
+              <p>Public API  </p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-seajs.use = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ids, callback)</span> </span>{
-  Module.use(ids, callback, data.cwd + <span class="hljs-string">"_use_"</span> + cid())
-  <span class="hljs-keyword">return</span> seajs
-}
+            <div class="content"><div class='highlight'><pre>seajs.use = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ids, callback)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-135">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-135">&#182;</a>
+              </div>
+              <p><code>uri</code> 是自增长的地址，而且不是脚本，所以把 <code>ids</code> 作为依赖进行加载</p>
 
-Module.define.cmd = {}
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Module.use(ids, callback, data.cwd + <span class="hljs-string">"_use_"</span> + cid())
+  <span class="hljs-keyword">return</span> seajs
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-136">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-136">&#182;</a>
+              </div>
+              <p>这个 cmd 有什么用处？仅仅为了让 define.cmd 为 true？</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Module.define.cmd = {}
 global.define = Module.define</pre></div></div>
             
         </li>
         
         
-        <li id="section-96">
+        <li id="section-137">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-96">&#182;</a>
+                <a class="pilcrow" href="#section-137">&#182;</a>
               </div>
               <p>For Developers</p>
 
@@ -2186,30 +2649,56 @@ global.define = Module.define</pre></div></div>
             <div class="content"><div class='highlight'><pre>
 seajs.Module = Module
 data.fetchedList = fetchedList
-data.cid = cid
 
-seajs.require = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> </span>{
+data.cid = cid</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-138">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-138">&#182;</a>
+              </div>
+              <p>和 <code>define</code> 里面的 <code>require</code> 方法差不多</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>seajs.require = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> </span>{
   <span class="hljs-keyword">var</span> mod = Module.get(Module.resolve(id))
   <span class="hljs-keyword">if</span> (mod.status &lt; STATUS.EXECUTING) {
     mod.onload()
     mod.exec()
   }
   <span class="hljs-keyword">return</span> mod.exports
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-139">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-139">&#182;</a>
+              </div>
+              <hr>
 
-
-<span class="hljs-comment">/**
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
  * config.js - The configuration for the loader
  */</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-97">
+        <li id="section-140">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-97">&#182;</a>
+                <a class="pilcrow" href="#section-140">&#182;</a>
               </div>
               <p>The root path to use for id2uri parsing</p>
 
@@ -2220,11 +2709,11 @@ seajs.require = <span class="hljs-function"><span class="hljs-keyword">function<
         </li>
         
         
-        <li id="section-98">
+        <li id="section-141">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-98">&#182;</a>
+                <a class="pilcrow" href="#section-141">&#182;</a>
               </div>
               <p>The loader directory</p>
 
@@ -2235,11 +2724,11 @@ seajs.require = <span class="hljs-function"><span class="hljs-keyword">function<
         </li>
         
         
-        <li id="section-99">
+        <li id="section-142">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-99">&#182;</a>
+                <a class="pilcrow" href="#section-142">&#182;</a>
               </div>
               <p>The current working directory</p>
 
@@ -2250,11 +2739,11 @@ seajs.require = <span class="hljs-function"><span class="hljs-keyword">function<
         </li>
         
         
-        <li id="section-100">
+        <li id="section-143">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-100">&#182;</a>
+                <a class="pilcrow" href="#section-143">&#182;</a>
               </div>
               <p>The charset for requesting files</p>
 
@@ -2265,11 +2754,11 @@ seajs.require = <span class="hljs-function"><span class="hljs-keyword">function<
         </li>
         
         
-        <li id="section-101">
+        <li id="section-144">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-101">&#182;</a>
+                <a class="pilcrow" href="#section-144">&#182;</a>
               </div>
               <p>data.alias - An object containing shorthands of module id
 data.paths - An object containing path shorthands in module id
@@ -2289,13 +2778,13 @@ seajs.config = <span class="hljs-function"><span class="hljs-keyword">function</
         </li>
         
         
-        <li id="section-102">
+        <li id="section-145">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-102">&#182;</a>
+                <a class="pilcrow" href="#section-145">&#182;</a>
               </div>
-              <p>Merge object config such as alias, vars</p>
+              <p>Merge object config such as alias, vars<br>configData 覆盖 data 里面相同key的值</p>
 
             </div>
             
@@ -2309,11 +2798,11 @@ seajs.config = <span class="hljs-function"><span class="hljs-keyword">function</
         </li>
         
         
-        <li id="section-103">
+        <li id="section-146">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-103">&#182;</a>
+                <a class="pilcrow" href="#section-146">&#182;</a>
               </div>
               <p>Concat array config such as map</p>
 
@@ -2326,11 +2815,11 @@ seajs.config = <span class="hljs-function"><span class="hljs-keyword">function</
         </li>
         
         
-        <li id="section-104">
+        <li id="section-147">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-104">&#182;</a>
+                <a class="pilcrow" href="#section-147">&#182;</a>
               </div>
               <p>Make sure that <code>data.base</code> is an absolute path</p>
 
@@ -2341,13 +2830,13 @@ seajs.config = <span class="hljs-function"><span class="hljs-keyword">function</
         </li>
         
         
-        <li id="section-105">
+        <li id="section-148">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-105">&#182;</a>
+                <a class="pilcrow" href="#section-148">&#182;</a>
               </div>
-              <p>Make sure end with “/“</p>
+              <p>Make sure end with “/“<br>确保 base 路径后面带了 “/“</p>
 
             </div>
             
@@ -2360,11 +2849,11 @@ seajs.config = <span class="hljs-function"><span class="hljs-keyword">function</
         </li>
         
         
-        <li id="section-106">
+        <li id="section-149">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-106">&#182;</a>
+                <a class="pilcrow" href="#section-149">&#182;</a>
               </div>
               <p>Set config</p>
 

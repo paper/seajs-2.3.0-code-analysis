@@ -34,7 +34,7 @@
 html { height: 100%; }
 body {
   font-family: "aller-light";
-  font-size: 12px;
+  font-size: 14px;
   line-height: 18px;
   color: #30404f;
   margin: 0; padding: 0;
@@ -80,7 +80,7 @@ hr {
   border: 0;
   background: 1px #ddd;
   height: 1px;
-  margin: 0;
+  margin: 20px 0;
 }
 
 pre, tt, code {
@@ -349,7 +349,7 @@ ul.sections > li > div {
 @media only screen and (min-width: 1025px) {
 
   body {
-    font-size: 12px;
+    font-size: 16px;
     line-height: 24px;
   }
 
