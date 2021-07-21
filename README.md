@@ -13,7 +13,7 @@ seajs 2.3.0 源码解析
 [@玉伯](https://github.com/lifesinger/) 本来是要写seajs源码解析的，好像难产了，估计太忙了。
 这里可以看到几篇：https://github.com/lifesinger/lifesinger.github.com/issues
 
-我这里的解析主要是自己学习，仅供参考，如果有不对的或理解错的，欢迎 Issues 和 Fork
+我这里的解析主要是自己学习，仅供参考，如果有不对的或理解错的，欢迎 Issues
 
 [【seajs-2.3.0 源码解析地址】](https://paper.github.io/seajs-2.3.0-code-analysis/seajs-2.3.0/docs/sea-debug.html)
 
@@ -22,7 +22,7 @@ seajs 2.3.0 源码解析
 #### v1.0
 解析的基本上差不多了。 :D
 
-seajs不管是从结构性、低耦合，还是代码精简，技巧，命名等等，我个人觉得是非常非常棒的，是我学习的目标！！（咳咳，有点激动了~）
+seajs不管是从结构性、低耦合，还是代码精简，技巧，命名等等，我个人觉得是非常非常棒的，是我学习的目标！！
 
 英文基本上都是原来代码里面有的，应该很好区分。
 
