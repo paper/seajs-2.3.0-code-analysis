@@ -5,7 +5,7 @@ seajs 2.3.0 源码解析
 
 
 
-##说明
+## 说明
 从这里下载的最新版本：http://seajs.org/docs/#downloads (2014-06-10 发布 Sea.js 2.3.0)
 
 现在[seajs github](https://github.com/seajs/seajs)上已经是 3.0.0 了。（更新好快啊）
@@ -17,19 +17,19 @@ seajs 2.3.0 源码解析
 
 [【seajs-2.3.0 源码解析地址】](https://paper.github.io/seajs-2.3.0-code-analysis/seajs-2.3.0/docs/sea-debug.html)
 
-##Changelog
+## Changelog
 
-#####1.0
+#### v1.0
 解析的基本上差不多了。 :D
 
 seajs不管是从结构性、低耦合，还是代码精简，技巧，命名等等，我个人觉得是非常非常棒的，是我学习的目标！！（咳咳，有点激动了~）
 
 英文基本上都是原来代码里面有的，应该很好区分。
 
-#####0.3
+#### v0.3
 1. 使用 https://github.com/jashkenas/docco 来美化阅读，等我写的差不多了，出1.0版本的时候，再放出 demo 吧。
 
-##一些讲解（我的个人理解）
+## 一些讲解（我的个人理解）
 
 1. `_waitings` 与 `_remain` 的技巧说明
 	```
